@@ -2,6 +2,8 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
     padding: 15px;
     background-color: #f8f9fa;
+    max-width: 850px; /* TOTAL WIDTH LIMIT */
+    margin: 0 auto;
 }
 
 .order-table-container {
@@ -15,7 +17,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 15px 20px;
     background-color: #4a6fa5;
     color: white;
 }
@@ -49,8 +51,7 @@
 .order-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 700px;
-    table-layout: fixed;
+    table-layout: fixed; /* Fixed layout for consistent column widths */
 }
 
 .order-table th {
@@ -63,68 +64,75 @@
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.03em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .order-table td {
-    padding: 8px;
+    padding: 10px 8px;
     border-bottom: 1px solid #e2e8f0;
     vertical-align: top;
+    height: auto; /* Let content determine height */
 }
 
-/* Column Width Adjustments */
-.order-table th:nth-child(1), /* Quantity */
+/* NARROW COLUMN WIDTHS (WIDTH, NOT HEIGHT) */
+.order-table th:nth-child(1), /* Quantity - VERY NARROW */
 .order-table td:nth-child(1) {
-    width: 80px !important; /* Much narrower for quantity */
-    min-width: 80px;
-    max-width: 80px;
+    width: 60px; /* Only 60px wide */
+    min-width: 60px;
+    max-width: 60px;
+    text-align: center;
 }
 
 .order-table th:nth-child(2), /* Description */
 .order-table td:nth-child(2) {
-    width: 180px !important;
+    width: 180px;
     min-width: 180px;
 }
 
 .order-table th:nth-child(3), /* Reason */
 .order-table td:nth-child(3) {
-    width: 180px !important;
-    min-width: 180px;
+    width: 150px;
+    min-width: 150px;
 }
 
 .order-table th:nth-child(4), /* Product Link */
 .order-table td:nth-child(4) {
-    width: 150px !important;
-    min-width: 150px;
+    width: 140px;
+    min-width: 140px;
 }
 
 .order-table th:nth-child(5), /* Organization */
 .order-table td:nth-child(5) {
-    width: 120px !important;
+    width: 120px;
     min-width: 120px;
 }
 
-.order-table th:nth-child(6), /* Cost per Item */
+.order-table th:nth-child(6), /* Cost per Item - VERY NARROW */
 .order-table td:nth-child(6) {
-    width: 100px !important; /* Much narrower for cost */
-    min-width: 100px;
-    max-width: 100px;
+    width: 80px; /* Only 80px wide */
+    min-width: 80px;
+    max-width: 80px;
+    text-align: center;
 }
 
 .order-table th:nth-child(7), /* Row Total */
 .order-table td:nth-child(7) {
-    width: 100px !important;
-    min-width: 100px;
-    max-width: 100px;
+    width: 90px;
+    min-width: 90px;
+    max-width: 90px;
     text-align: right;
-    padding-right: 12px !important;
 }
 
 .order-table th:nth-child(8), /* Actions */
 .order-table td:nth-child(8) {
-    width: 90px !important;
-    min-width: 90px;
-    max-width: 90px;
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
 }
+
+/* TOTAL WIDTH CALCULATION: 60+180+150+140+120+80+90+70 = 890px (with some buffer) */
 
 .order-table tbody tr:hover {
     background-color: #f8fafc;
@@ -134,7 +142,7 @@
 .order-table textarea,
 .order-table select {
     width: 100%;
-    padding: 6px 8px;
+    padding: 8px 6px;
     border: 1px solid #d1d5db;
     border-radius: 4px;
     font-size: 13px;
@@ -142,12 +150,23 @@
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-/* Even narrower inputs for quantity and cost */
-.order-table td:nth-child(1) input,
-.order-table td:nth-child(6) input {
-    padding: 6px;
+/* EXTRA NARROW INPUTS FOR QUANTITY AND COST */
+.order-table td:nth-child(1) input {
+    padding: 8px 4px;
     text-align: center;
-    font-size: 12px;
+    font-size: 13px;
+    max-width: 50px;
+    margin: 0 auto;
+    display: block;
+}
+
+.order-table td:nth-child(6) input {
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 13px;
+    max-width: 70px;
+    margin: 0 auto;
+    display: block;
 }
 
 .order-table input:focus,
@@ -160,31 +179,29 @@
 
 .order-table textarea {
     resize: vertical;
-    min-height: 50px;
+    min-height: 60px; /* Keep reasonable height for text */
     font-family: inherit;
-    line-height: 1.3;
-    font-size: 12px;
-    padding: 6px 8px;
+    line-height: 1.4;
+    font-size: 13px;
 }
 
 .row-total {
     font-weight: 600;
     color: #1e40af;
     font-size: 13px;
-    padding-right: 12px !important;
+    padding-right: 8px !important;
 }
 
 .delete-btn {
     background-color: #ef4444;
     color: white;
     border: none;
-    padding: 5px 8px;
+    padding: 6px 8px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 11px;
     transition: background-color 0.2s;
     width: 100%;
-    max-width: 70px;
 }
 
 .delete-btn:hover {
@@ -203,7 +220,7 @@
 
 .total-label {
     text-align: right;
-    padding-right: 12px !important;
+    padding-right: 8px !important;
     font-size: 14px;
     color: #334155;
 }
@@ -212,11 +229,11 @@
     font-size: 15px;
     color: #1e40af;
     text-align: right;
-    padding-right: 12px !important;
+    padding-right: 8px !important;
 }
 
 .table-footer {
-    padding: 10px 15px;
+    padding: 10px 20px;
     background-color: #f8fafc;
     border-top: 1px solid #e2e8f0;
     color: #64748b;
@@ -224,31 +241,23 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .widget-container {
         padding: 10px;
+        max-width: 100%;
     }
     
     .table-header {
         flex-direction: column;
         gap: 8px;
         align-items: flex-start;
-        padding: 12px;
+        padding: 12px 15px;
     }
     
     .add-row-btn {
         align-self: stretch;
         text-align: center;
-        padding: 6px;
-    }
-    
-    .order-table {
-        min-width: 600px;
-    }
-    
-    .order-table th,
-    .order-table td {
-        padding: 6px;
+        padding: 8px;
     }
 }
 
@@ -263,27 +272,40 @@
     border-color: #10b981;
 }
 
-/* Auto-resize textarea */
+/* Auto-resize textarea - keeps height flexible */
 .auto-resize {
-    resize: none;
+    resize: vertical;
     overflow: hidden;
-    min-height: 50px;
+    min-height: 60px;
 }
 
-/* Compact number inputs */
+/* Compact styling for number inputs */
 input[type="number"] {
-    font-family: 'Courier New', monospace;
-    font-size: 12px;
+    font-weight: 500;
 }
 
 /* Organization select styling */
 .organization-select {
-    font-size: 12px;
-    padding: 5px 6px;
+    font-size: 13px;
+    padding: 8px 6px;
 }
 
 /* Link input styling */
 .link-input {
-    font-size: 11px;
-    font-family: 'Courier New', monospace;
+    font-size: 12px;
+}
+
+/* Ensure table doesn't exceed container */
+.order-table {
+    max-width: 100%;
+}
+
+/* Vertical alignment for all cells */
+.order-table td {
+    vertical-align: middle;
+}
+
+/* Adjust textarea vertical alignment */
+.order-table td textarea {
+    vertical-align: top;
 }
