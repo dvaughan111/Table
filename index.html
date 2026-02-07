@@ -3,18 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Form Table</title>
+    <title>Order Form</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <!-- Jotform dependencies -->
     <script src="https://js.jotform.com/JotForm.js"></script>
+    <style>
+        /* Additional inline styles for color accents */
+        .color-accent {
+            color: #fc731c;
+        }
+        .color-primary {
+            color: #601a9b;
+        }
+        .color-secondary {
+            color: #f4ee38;
+        }
+    </style>
 </head>
 <body>
     <div class="widget-container">
         <div class="order-table-container">
             <div class="table-header">
-                <h3>Order Form</h3>
-                <button type="button" id="addRowBtn" class="add-row-btn">+ Add Row</button>
+                <h3>📋 Order Form</h3>
+                <button type="button" id="addRowBtn" class="add-row-btn">
+                    <span style="font-size: 16px; margin-right: 4px;">+</span> Add New Item
+                </button>
             </div>
             
             <div class="table-wrapper">
@@ -28,7 +42,7 @@
                             <th class="col-organization">Organization</th>
                             <th class="col-cost">Cost/Item</th>
                             <th class="col-row-total">Total</th>
-                            <th class="col-actions">Actions</th>
+                            <th class="col-actions">&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -36,7 +50,7 @@
                     </tbody>
                     <tfoot>
                         <tr class="total-row">
-                            <td colspan="6" class="total-label">GRAND TOTAL:</td>
+                            <td colspan="6" class="total-label">🎯 GRAND TOTAL:</td>
                             <td id="grandTotal" class="grand-total">$0.00</td>
                             <td></td>
                         </tr>
@@ -45,7 +59,7 @@
             </div>
             
             <div class="table-footer">
-                <small>Total will update automatically as you enter quantities and costs.</small>
+                <small>✨ Total updates automatically. Add rows as needed.</small>
             </div>
         </div>
     </div>
