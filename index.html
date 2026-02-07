@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Form</title>
     <style>
-        /* ULTRA COMPACT STYLES */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* ULTRA COMPACT STYLES WITH MINIMAL MARGINS */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
         
         .widget-container {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            padding: 6px;
-            max-width: 800px;
+            padding: 6px 2px; /* REDUCED LEFT/RIGHT PADDING */
+            max-width: 850px;
             margin: 0 auto;
             background-color: #f9f9f9;
         }
@@ -22,6 +26,7 @@
             box-shadow: 0 1px 6px rgba(96, 26, 155, 0.1);
             overflow: hidden;
             border: 1px solid #e0d4e9;
+            margin: 0 1px; /* MINIMAL SIDE MARGINS */
         }
         
         /* TABLE HEADER */
@@ -56,9 +61,10 @@
             background-color: #e56418;
         }
         
-        /* TABLE */
+        /* TABLE - NO SIDE MARGINS */
         .table-wrapper {
             overflow-x: auto;
+            margin: 0 -1px; /* NEGATIVE MARGIN TO EXTEND TO EDGES */
         }
         
         .order-table {
@@ -68,10 +74,10 @@
             font-size: 11px;
         }
         
-        /* TABLE HEADERS */
+        /* TABLE HEADERS - MINIMAL PADDING */
         .order-table th {
             background-color: #f8f3fc;
-            padding: 5px 3px;
+            padding: 6px 4px; /* MORE VERTICAL, LESS HORIZONTAL */
             text-align: left;
             font-weight: 600;
             color: #601a9b;
@@ -83,98 +89,98 @@
             text-overflow: ellipsis;
         }
         
-        /* TABLE CELLS */
+        /* TABLE CELLS - MINIMAL PADDING */
         .order-table td {
-            padding: 5px 3px;
+            padding: 6px 4px; /* MORE VERTICAL, LESS HORIZONTAL */
             border-bottom: 1px solid #f0e6f6;
             vertical-align: top;
             color: #000000;
         }
         
-        /* ULTRA-COMPACT COLUMN WIDTHS - TOTAL: ~720px */
+        /* WIDER COLUMN WIDTHS NOW (TOTAL: ~800px) */
         .order-table th:nth-child(1), /* Qty */
         .order-table td:nth-child(1) {
-            width: 40px;
-            min-width: 40px;
-            max-width: 40px;
-            text-align: center;
-        }
-        
-        .order-table th:nth-child(2), /* Description */
-        .order-table td:nth-child(2) {
-            width: 120px;
-            min-width: 120px;
-            max-width: 120px;
-        }
-        
-        .order-table th:nth-child(3), /* Reason */
-        .order-table td:nth-child(3) {
-            width: 110px;
-            min-width: 110px;
-            max-width: 110px;
-        }
-        
-        .order-table th:nth-child(4), /* Link */
-        .order-table td:nth-child(4) {
-            width: 100px;
-            min-width: 100px;
-            max-width: 100px;
-        }
-        
-        .order-table th:nth-child(5), /* Organization */
-        .order-table td:nth-child(5) {
-            width: 90px;
-            min-width: 90px;
-            max-width: 90px;
-        }
-        
-        .order-table th:nth-child(6), /* Cost */
-        .order-table td:nth-child(6) {
-            width: 60px;
-            min-width: 60px;
-            max-width: 60px;
-            text-align: center;
-        }
-        
-        .order-table th:nth-child(7), /* Row Total */
-        .order-table td:nth-child(7) {
-            width: 65px;
-            min-width: 65px;
-            max-width: 65px;
-            text-align: right;
-        }
-        
-        .order-table th:nth-child(8), /* Status - THIS IS THE COLUMN WITH CHECKBOXES */
-        .order-table td:nth-child(8) {
-            width: 75px;
-            min-width: 75px;
-            max-width: 75px;
-            text-align: left;
-        }
-        
-        .order-table th:nth-child(9), /* Delete */
-        .order-table td:nth-child(9) {
             width: 45px;
             min-width: 45px;
             max-width: 45px;
             text-align: center;
         }
         
-        /* TOTAL WIDTH: 40+120+110+100+90+60+65+75+45 = 705px */
+        .order-table th:nth-child(2), /* Description */
+        .order-table td:nth-child(2) {
+            width: 140px;
+            min-width: 140px;
+            max-width: 140px;
+        }
         
-        /* INPUTS - EXTREMELY COMPACT */
+        .order-table th:nth-child(3), /* Reason */
+        .order-table td:nth-child(3) {
+            width: 130px;
+            min-width: 130px;
+            max-width: 130px;
+        }
+        
+        .order-table th:nth-child(4), /* Link */
+        .order-table td:nth-child(4) {
+            width: 120px;
+            min-width: 120px;
+            max-width: 120px;
+        }
+        
+        .order-table th:nth-child(5), /* Organization */
+        .order-table td:nth-child(5) {
+            width: 110px;
+            min-width: 110px;
+            max-width: 110px;
+        }
+        
+        .order-table th:nth-child(6), /* Cost */
+        .order-table td:nth-child(6) {
+            width: 75px;
+            min-width: 75px;
+            max-width: 75px;
+            text-align: center;
+        }
+        
+        .order-table th:nth-child(7), /* Row Total */
+        .order-table td:nth-child(7) {
+            width: 80px;
+            min-width: 80px;
+            max-width: 80px;
+            text-align: right;
+        }
+        
+        .order-table th:nth-child(8), /* Status - WIDER FOR CHECKBOXES */
+        .order-table td:nth-child(8) {
+            width: 95px;
+            min-width: 95px;
+            max-width: 95px;
+            text-align: left;
+        }
+        
+        .order-table th:nth-child(9), /* Delete */
+        .order-table td:nth-child(9) {
+            width: 50px;
+            min-width: 50px;
+            max-width: 50px;
+            text-align: center;
+        }
+        
+        /* TOTAL WIDTH: 45+140+130+120+110+75+80+95+50 = 845px */
+        
+        /* INPUTS - MINIMAL HORIZONTAL PADDING */
         .order-table input,
         .order-table textarea,
         .order-table select {
             width: 100%;
-            padding: 3px 2px;
+            padding: 5px 3px; /* MORE VERTICAL, LESS HORIZONTAL */
             border: 1px solid #d8c8e4;
             border-radius: 2px;
-            font-size: 10px;
+            font-size: 11px;
             color: #000000;
             background-color: #fefcff;
             font-family: inherit;
-            line-height: 1.1;
+            line-height: 1.2;
         }
         
         .order-table input:focus,
@@ -188,11 +194,11 @@
         
         /* QUANTITY INPUT */
         .order-table td:nth-child(1) input {
-            padding: 3px 1px;
+            padding: 5px 2px;
             text-align: center;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 600;
-            max-width: 30px;
+            max-width: 35px;
             margin: 0 auto;
             display: block;
         }
@@ -206,20 +212,20 @@
         .cost-input-wrapper::before {
             content: "$";
             position: absolute;
-            left: 3px;
+            left: 4px;
             top: 50%;
             transform: translateY(-50%);
             color: #601a9b;
             font-weight: 600;
             z-index: 1;
             pointer-events: none;
-            font-size: 9px;
+            font-size: 10px;
         }
         
         .order-table td:nth-child(6) input {
-            padding: 3px 3px 3px 12px;
+            padding: 5px 4px 5px 14px;
             text-align: right;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 600;
             width: 100%;
             color: #601a9b;
@@ -228,9 +234,9 @@
         /* TEXTAREAS */
         .order-table textarea {
             resize: vertical;
-            min-height: 40px;
-            line-height: 1.1;
-            font-size: 10px;
+            min-height: 45px;
+            line-height: 1.2;
+            font-size: 11px;
             color: #000000;
         }
         
@@ -238,42 +244,42 @@
         .row-total {
             font-weight: 600;
             color: #000000;
-            font-size: 10px;
-            padding: 3px 2px !important;
+            font-size: 11px;
+            padding: 5px 3px !important;
             display: block;
             text-align: right;
             background-color: #fefcff;
             border: 1px solid #d8c8e4;
             border-radius: 2px;
-            min-height: 24px;
-            line-height: 1.1;
+            min-height: 28px;
+            line-height: 1.2;
         }
         
-        /* STATUS CHECKBOXES - ULTRA COMPACT */
+        /* STATUS CHECKBOXES - MORE SPACIOUS */
         .status-checkboxes {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
             align-items: flex-start;
-            padding: 3px;
+            padding: 5px;
             background-color: #fefcff;
             border: 1px solid #d8c8e4;
             border-radius: 2px;
-            min-height: 50px;
+            min-height: 60px;
         }
         
         .checkbox-group {
             display: flex;
             align-items: center;
-            gap: 3px;
-            font-size: 9px;
+            gap: 5px;
+            font-size: 10px;
             color: #000000;
             width: 100%;
         }
         
         .checkbox-group input[type="checkbox"] {
-            width: 10px;
-            height: 10px;
+            width: 12px;
+            height: 12px;
             margin: 0;
             accent-color: #fc731c;
             cursor: pointer;
@@ -292,10 +298,10 @@
             background-color: #fc731c;
             color: white;
             border: none;
-            padding: 3px 4px;
+            padding: 4px 6px;
             border-radius: 2px;
             cursor: pointer;
-            font-size: 9px;
+            font-size: 10px;
             font-weight: 600;
             transition: all 0.2s ease;
             width: 100%;
@@ -320,83 +326,103 @@
         
         .total-label {
             text-align: center;
-            padding: 5px 3px !important;
-            font-size: 11px;
+            padding: 6px 4px !important;
+            font-size: 12px;
             color: white;
             font-weight: 700;
         }
         
         .grand-total {
-            font-size: 12px;
+            font-size: 14px;
             color: white;
             font-weight: 700;
             text-align: center;
-            padding: 5px 3px !important;
+            padding: 6px 4px !important;
         }
         
         /* ICON IN GRAND TOTAL */
         .total-icon {
             display: inline-block;
-            margin-right: 3px;
-            font-size: 12px;
+            margin-right: 5px;
+            font-size: 13px;
         }
         
         /* TABLE FOOTER */
         .table-footer {
-            padding: 5px 10px;
+            padding: 6px 10px;
             background-color: #fef7e6;
             border-top: 1px solid #f4ee38;
             color: #7b5fa1;
-            font-size: 9px;
+            font-size: 10px;
             text-align: center;
         }
         
-        /* HIDE HORIZONTAL SCROLL ON WIDE SCREENS */
-        @media (min-width: 750px) {
+        /* REMOVE HORIZONTAL SCROLL ON WIDE ENOUGH SCREENS */
+        @media (min-width: 860px) {
             .table-wrapper {
                 overflow-x: hidden;
             }
         }
         
-        /* RESPONSIVE */
-        @media (max-width: 749px) {
+        /* RESPONSIVE FOR SMALLER SCREENS */
+        @media (max-width: 859px) {
             .widget-container {
-                padding: 4px;
+                padding: 5px 1px;
             }
             
-            .table-header {
-                padding: 6px 8px;
+            .order-table-container {
+                margin: 0;
             }
             
-            .add-row-btn {
-                padding: 3px 6px;
-                font-size: 10px;
+            .table-wrapper {
+                margin: 0;
             }
         }
         
-        /* HEADER TEXT ABBREVIATIONS */
-        .order-table th:nth-child(3)::after {
-            content: "REASON";
+        /* SPECIAL: EVEN MORE COMPACT IF NEEDED */
+        .compact-mode .order-table th,
+        .compact-mode .order-table td {
+            padding: 5px 3px;
         }
         
-        .order-table th:nth-child(4)::after {
-            content: "LINK";
+        .compact-mode .order-table input,
+        .compact-mode .order-table textarea,
+        .compact-mode .order-table select {
+            padding: 4px 2px;
+            font-size: 10px;
         }
         
-        .order-table th:nth-child(5)::after {
-            content: "ORG";
+        /* SCROLLBAR - THIN */
+        .table-wrapper::-webkit-scrollbar {
+            height: 4px;
         }
         
-        .order-table th:nth-child(6)::after {
-            content: "COST";
+        .table-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 2px;
         }
         
-        .order-table th:nth-child(7)::after {
-            content: "TOTAL";
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: #c4b1d6;
+            border-radius: 2px;
         }
         
-        .order-table th:nth-child(8)::after {
-            content: "STATUS";
+        .table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #a48bc0;
+        }
+        
+        /* HEADER ABBREVIATIONS FOR NARROW SPACES */
+        .header-abbr {
+            display: none;
+        }
+        
+        @media (max-width: 600px) {
+            .header-full {
+                display: none;
+            }
+            .header-abbr {
+                display: inline;
+            }
         }
     </style>
 </head>
@@ -405,7 +431,7 @@
         <div class="order-table-container">
             <div class="table-header">
                 <h3>📋 Order Form</h3>
-                <button type="button" id="addRowBtn" class="add-row-btn">+ Add</button>
+                <button type="button" id="addRowBtn" class="add-row-btn">+ Add Item</button>
             </div>
             
             <div class="table-wrapper">
@@ -414,10 +440,10 @@
                         <tr>
                             <th>QTY</th>
                             <th>DESCRIPTION</th>
-                            <th>REASON</th>
-                            <th>LINK</th>
-                            <th>ORG</th>
-                            <th>COST</th>
+                            <th><span class="header-full">REASON</span><span class="header-abbr">REASON</span></th>
+                            <th><span class="header-full">LINK</span><span class="header-abbr">LINK</span></th>
+                            <th><span class="header-full">ORGANIZATION</span><span class="header-abbr">ORG</span></th>
+                            <th><span class="header-full">COST/ITEM</span><span class="header-abbr">COST</span></th>
                             <th>TOTAL</th>
                             <th>STATUS</th>
                             <th>&nbsp;</th>
@@ -439,7 +465,7 @@
             </div>
             
             <div class="table-footer">
-                ✨ Auto-updating
+                ✨ Auto-updating totals
             </div>
         </div>
     </div>
@@ -448,6 +474,13 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeTable();
             document.getElementById('addRowBtn').addEventListener('click', addRow);
+            
+            // Initialize auto-resize for textareas
+            setTimeout(() => {
+                document.querySelectorAll('.auto-resize').forEach(textarea => {
+                    autoResizeTextarea(textarea);
+                });
+            }, 100);
         });
 
         function initializeTable() {
@@ -477,25 +510,25 @@
                 </td>
                 <td>
                     <textarea class="description-input auto-resize" 
-                              placeholder="Item description" 
+                              placeholder="Enter item description" 
                               data-row="${rowId}"></textarea>
                 </td>
                 <td>
                     <textarea class="reason-input auto-resize" 
-                              placeholder="Reason" 
+                              placeholder="Enter reason for request" 
                               data-row="${rowId}"></textarea>
                 </td>
                 <td>
                     <input type="url" 
                            class="link-input" 
-                           placeholder="https://..."
+                           placeholder="https://example.com"
                            data-row="${rowId}">
                 </td>
                 <td>
                     <select class="organization-select" data-row="${rowId}">
-                        <option value="">Select</option>
-                        <option value="spark_home_health">Home Health</option>
-                        <option value="spark_therapy">Therapy</option>
+                        <option value="">Select Organization</option>
+                        <option value="spark_home_health">Spark Home Health</option>
+                        <option value="spark_therapy">Spark Therapy</option>
                         <option value="both">Both</option>
                         <option value="other">Other</option>
                     </select>
@@ -538,25 +571,20 @@
                             class="delete-btn" 
                             onclick="deleteRow('${rowId}')"
                             ${document.querySelectorAll('#tableBody tr').length <= 1 ? 'disabled' : ''}>
-                        ✕
+                        Delete
                     </button>
                 </td>
             `;
             
             tableBody.appendChild(row);
             
-            // Add auto-resize to textareas
+            // Auto-resize textareas
             const textareas = row.querySelectorAll('.auto-resize');
             textareas.forEach(textarea => {
                 textarea.addEventListener('input', function() {
-                    this.style.height = 'auto';
-                    this.style.height = (this.scrollHeight) + 'px';
+                    autoResizeTextarea(this);
                 });
-                // Trigger initial resize
-                setTimeout(() => {
-                    textarea.style.height = 'auto';
-                    textarea.style.height = (textarea.scrollHeight) + 'px';
-                }, 10);
+                setTimeout(() => autoResizeTextarea(textarea), 10);
             });
             
             // Add calculation listeners
@@ -604,11 +632,7 @@
             const costPerItem = parseFloat(costInput.value) || 0;
             const rowTotal = quantity * costPerItem;
             
-            rowTotalElement.textContent = new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2
-            }).format(rowTotal);
+            rowTotalElement.textContent = formatCurrency(rowTotal);
         }
 
         function updateGrandTotal() {
@@ -621,11 +645,20 @@
                 grandTotal += value;
             });
             
-            document.getElementById('grandTotal').textContent = new Intl.NumberFormat('en-US', {
+            document.getElementById('grandTotal').textContent = formatCurrency(grandTotal);
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD',
                 minimumFractionDigits: 2
-            }).format(grandTotal);
+            }).format(amount);
+        }
+
+        window.autoResizeTextarea = function(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 100) + 'px';
         }
 
         window.updateStatus = function(rowId, statusType, isChecked) {
@@ -639,6 +672,11 @@
                     otherCheckbox.checked = false;
                 }
             }
+        };
+        
+        // Optional: Toggle compact mode
+        window.toggleCompactMode = function() {
+            document.querySelector('.order-table-container').classList.toggle('compact-mode');
         };
     </script>
 </body>
