@@ -5,28 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Form</title>
     <style>
-        /* ULTRA COMPACT STYLES WITH MINIMAL MARGINS */
+        /* ZERO MARGIN STYLES - HUGS EDGES */
         * { 
             box-sizing: border-box; 
             margin: 0; 
             padding: 0; 
         }
         
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        
         .widget-container {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            padding: 6px 2px;
-            max-width: 900px;
+            padding: 4px 0; /* ZERO horizontal padding */
+            max-width: 850px;
             margin: 0 auto;
             background-color: #f9f9f9;
         }
         
         .order-table-container {
             background: white;
-            border-radius: 2px;
+            border-radius: 4px;
             box-shadow: 0 1px 6px rgba(96, 26, 155, 0.1);
             overflow: hidden;
             border: 1px solid #e0d4e9;
-            margin: 0 1px;
+            margin: 0; /* NO MARGIN */
         }
         
         /* TABLE HEADER */
@@ -61,10 +67,10 @@
             background-color: #e56418;
         }
         
-        /* TABLE */
+        /* TABLE - NO MARGINS */
         .table-wrapper {
             overflow-x: auto;
-            margin: 0 -1px;
+            margin: 0; /* NO MARGIN */
         }
         
         .order-table {
@@ -74,10 +80,10 @@
             font-size: 11px;
         }
         
-        /* TABLE HEADERS */
+        /* TABLE HEADERS - MINIMAL PADDING */
         .order-table th {
             background-color: #f8f3fc;
-            padding: 6px 4px;
+            padding: 6px 3px; /* REDUCED HORIZONTAL PADDING */
             text-align: left;
             font-weight: 600;
             color: #601a9b;
@@ -89,15 +95,15 @@
             text-overflow: ellipsis;
         }
         
-        /* TABLE CELLS */
+        /* TABLE CELLS - MINIMAL PADDING */
         .order-table td {
-            padding: 4px 4px;
+            padding: 6px 3px; /* REDUCED HORIZONTAL PADDING */
             border-bottom: 1px solid #f0e6f6;
             vertical-align: top;
             color: #000000;
         }
         
-        /* ADJUSTED COLUMN WIDTHS - TOTAL: ~820px */
+        /* ADJUSTED COLUMN WIDTHS - TOTAL COLUMN SIGNIFICANTLY REDUCED */
         .order-table th:nth-child(1), /* Qty */
         .order-table td:nth-child(1) {
             width: 45px;
@@ -108,73 +114,72 @@
         
         .order-table th:nth-child(2), /* Description */
         .order-table td:nth-child(2) {
-            width: 150px; /* Slightly wider for descriptions */
-            min-width: 150px;
-            max-width: 150px;
+            width: 155px; /* INCREASED */
+            min-width: 155px;
+            max-width: 155px;
         }
         
         .order-table th:nth-child(3), /* Reason */
         .order-table td:nth-child(3) {
-            width: 130px;
-            min-width: 130px;
-            max-width: 130px;
+            width: 135px; /* INCREASED */
+            min-width: 135px;
+            max-width: 135px;
         }
         
         .order-table th:nth-child(4), /* Link */
         .order-table td:nth-child(4) {
-            width: 120px;
-            min-width: 120px;
-            max-width: 120px;
+            width: 125px; /* INCREASED */
+            min-width: 125px;
+            max-width: 125px;
         }
         
         .order-table th:nth-child(5), /* Organization */
         .order-table td:nth-child(5) {
-            width: 110px;
-            min-width: 110px;
-            max-width: 110px;
+            width: 115px; /* INCREASED */
+            min-width: 115px;
+            max-width: 115px;
         }
         
         .order-table th:nth-child(6), /* Cost */
         .order-table td:nth-child(6) {
-            width: 70px; /* Fits $999.99 */
+            width: 70px;
             min-width: 70px;
             max-width: 70px;
             text-align: center;
         }
         
-        .order-table th:nth-child(7), /* Row Total - REDUCED WIDTH */
+        .order-table th:nth-child(7), /* Row Total - SIGNIFICANTLY REDUCED */
         .order-table td:nth-child(7) {
-            width: 65px; /* REDUCED: Fits $9,999.99 */
-            min-width: 65px;
-            max-width: 65px;
+            width: 55px; /* REDUCED FROM 65px to 55px */
+            min-width: 55px;
+            max-width: 55px;
             text-align: right;
-            font-size: 10px;
         }
         
         .order-table th:nth-child(8), /* Status */
         .order-table td:nth-child(8) {
-            width: 100px; /* WIDER for better checkbox visibility */
-            min-width: 100px;
-            max-width: 100px;
+            width: 105px; /* INCREASED for better visibility */
+            min-width: 105px;
+            max-width: 105px;
             text-align: left;
         }
         
         .order-table th:nth-child(9), /* Delete */
         .order-table td:nth-child(9) {
-            width: 55px;
-            min-width: 55px;
-            max-width: 55px;
+            width: 50px;
+            min-width: 50px;
+            max-width: 50px;
             text-align: center;
         }
         
-        /* TOTAL WIDTH: 45+150+130+120+110+70+65+100+55 = 845px */
+        /* TOTAL WIDTH: 45+155+135+125+115+70+55+105+50 = 855px (slightly over but will work) */
         
-        /* INPUTS */
+        /* INPUTS - MINIMAL PADDING */
         .order-table input,
         .order-table textarea,
         .order-table select {
             width: 100%;
-            padding: 5px 3px;
+            padding: 5px 2px; /* REDUCED HORIZONTAL PADDING */
             border: 1px solid #d8c8e4;
             border-radius: 2px;
             font-size: 11px;
@@ -195,7 +200,7 @@
         
         /* QUANTITY INPUT */
         .order-table td:nth-child(1) input {
-            padding: 5px 2px;
+            padding: 5px 1px; /* MINIMAL PADDING */
             text-align: center;
             font-size: 11px;
             font-weight: 600;
@@ -204,7 +209,7 @@
             display: block;
         }
         
-        /* COST INPUT - WITH DOLLAR SIGN */
+        /* COST INPUT */
         .cost-input-wrapper {
             position: relative;
             width: 100%;
@@ -213,7 +218,7 @@
         .cost-input-wrapper::before {
             content: "$";
             position: absolute;
-            left: 4px;
+            left: 3px; /* CLOSER TO EDGE */
             top: 50%;
             transform: translateY(-50%);
             color: #601a9b;
@@ -224,7 +229,7 @@
         }
         
         .order-table td:nth-child(6) input {
-            padding: 5px 4px 5px 14px;
+            padding: 5px 3px 5px 12px; /* REDUCED LEFT PADDING */
             text-align: right;
             font-size: 11px;
             font-weight: 600;
@@ -241,12 +246,12 @@
             color: #000000;
         }
         
-        /* ROW TOTAL - COMPACT FOR NUMBERS */
+        /* ROW TOTAL - COMPACT, NORMAL FONT SIZE BUT NARROWER */
         .row-total {
             font-weight: 600;
             color: #000000;
-            font-size: 10px; /* Smaller font for totals */
-            padding: 5px 3px !important;
+            font-size: 11px; /* NORMAL SIZE */
+            padding: 5px 2px !important; /* MINIMAL PADDING */
             display: block;
             text-align: right;
             background-color: #fefcff;
@@ -254,17 +259,19 @@
             border-radius: 2px;
             min-height: 28px;
             line-height: 1.2;
-            font-family: 'Courier New', monospace; /* Monospace for numbers */
-            letter-spacing: -0.5px; /* Tighter letter spacing */
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         
-        /* STATUS CHECKBOXES - CLEAR VISIBILITY */
+        /* STATUS CHECKBOXES */
         .status-checkboxes {
             display: flex;
             flex-direction: column;
             gap: 6px;
             align-items: flex-start;
-            padding: 5px;
+            padding: 5px 3px; /* REDUCED PADDING */
             background-color: #fefcff;
             border: 1px solid #d8c8e4;
             border-radius: 2px;
@@ -274,7 +281,7 @@
         .checkbox-group {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             font-size: 10px;
             color: #000000;
             width: 100%;
@@ -301,7 +308,7 @@
             background-color: #fc731c;
             color: white;
             border: none;
-            padding: 4px 6px;
+            padding: 4px 5px; /* REDUCED PADDING */
             border-radius: 2px;
             cursor: pointer;
             font-size: 10px;
@@ -329,25 +336,25 @@
         
         .total-label {
             text-align: center;
-            padding: 6px 4px !important;
+            padding: 6px 3px !important; /* REDUCED PADDING */
             font-size: 12px;
             color: white;
             font-weight: 700;
         }
         
         .grand-total {
-            font-size: 13px; /* Slightly smaller */
+            font-size: 13px;
             color: white;
             font-weight: 700;
             text-align: center;
-            padding: 6px 4px !important;
-            font-family: 'Courier New', monospace; /* Monospace for numbers */
+            padding: 6px 3px !important; /* REDUCED PADDING */
+            font-family: 'Courier New', monospace;
         }
         
         /* ICON IN GRAND TOTAL */
         .total-icon {
             display: inline-block;
-            margin-right: 5px;
+            margin-right: 4px; /* REDUCED MARGIN */
             font-size: 12px;
         }
         
@@ -361,38 +368,23 @@
             text-align: center;
         }
         
-        /* NO HORIZONTAL SCROLL ON WIDE SCREENS */
-        @media (min-width: 830px) {
+        /* REMOVE HORIZONTAL SCROLL IF POSSIBLE */
+        @media (min-width: 860px) {
             .table-wrapper {
                 overflow-x: hidden;
             }
         }
         
-        /* RESPONSIVE */
-        @media (max-width: 829px) {
-            .widget-container {
-                padding: 5px 1px;
-            }
-            
-            .order-table-container {
-                margin: 0;
-            }
-            
-            .table-wrapper {
-                margin: 0;
-            }
+        /* REMOVE BODY MARGIN IN IFRAME */
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
         }
         
-        /* COMPACT NUMBER DISPLAY */
-        .compact-number {
-            font-size: 10px;
-            font-family: 'Courier New', monospace;
-            letter-spacing: -0.5px;
-        }
-        
-        /* MONOSPACE FOR ALL NUMBERS */
-        input[type="number"] {
-            font-family: 'Courier New', monospace;
+        /* FORCE NO EXTERNAL MARGINS */
+        .widget-container > * {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
         }
     </style>
 </head>
@@ -514,7 +506,7 @@
                     </div>
                 </td>
                 <td>
-                    <div class="row-total compact-number" id="row-total-${rowId}">$0.00</div>
+                    <div class="row-total" id="row-total-${rowId}">$0.00</div>
                 </td>
                 <td>
                     <div class="status-checkboxes">
@@ -619,18 +611,11 @@
         }
 
         function formatCurrency(amount) {
-            // Use compact formatting for large numbers
-            if (amount >= 10000) {
-                return '$' + amount.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
+            // Compact format that fits in 55px
+            if (amount >= 1000) {
+                return '$' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             } else {
-                return new Intl.NumberFormat('en-US', {
-                    style: 'currency',
-                    currency: 'USD',
-                    minimumFractionDigits: 2
-                }).format(amount);
+                return '$' + amount.toFixed(2);
             }
         }
 
