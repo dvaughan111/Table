@@ -87,7 +87,7 @@
             padding: 8px 6px;
             border-bottom: 1px solid #f0e6f6;
             vertical-align: top;
-            color: #000000; /* BLACK FONT */
+            color: #000000;
         }
         
         /* COLUMN WIDTHS - TIGHTER LAYOUT */
@@ -143,10 +143,10 @@
         
         .order-table th:nth-child(8), /* Status Checkboxes */
         .order-table td:nth-child(8) {
-            width: 90px;
-            min-width: 90px;
-            max-width: 90px;
-            text-align: center;
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
+            text-align: left;
         }
         
         .order-table th:nth-child(9), /* Actions */
@@ -171,7 +171,7 @@
             border: 1px solid #d8c8e4;
             border-radius: 3px;
             font-size: 12px;
-            color: #000000; /* BLACK TEXT */
+            color: #000000;
             background-color: #fefcff;
             font-family: inherit;
         }
@@ -232,32 +232,41 @@
             color: #000000;
         }
         
-        /* ROW TOTAL - YELLOW BACKGROUND, BLACK TEXT */
+        /* ROW TOTAL - NO YELLOW BACKGROUND, INPUT BOX STYLE */
         .row-total {
-            font-weight: 700;
-            color: #000000; /* BLACK TEXT */
+            font-weight: 600;
+            color: #000000;
             font-size: 12px;
-            background-color: rgba(244, 238, 56, 0.2);
+            padding: 6px 5px !important;
+            display: block;
+            text-align: right;
+            background-color: #fefcff;
+            border: 1px solid #d8c8e4;
             border-radius: 3px;
-            padding: 4px 6px !important;
-            display: inline-block;
-            text-align: center;
+            min-height: 34px;
+            line-height: 1.4;
         }
         
-        /* STATUS CHECKBOXES - APPROVE/PEND */
+        /* STATUS CHECKBOXES - INPUT BOX STYLE, LEFT ALIGNED, SAME FONT COLOR */
         .status-checkboxes {
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            align-items: center;
+            gap: 8px;
+            align-items: flex-start;
+            padding: 6px;
+            background-color: #fefcff;
+            border: 1px solid #d8c8e4;
+            border-radius: 3px;
+            min-height: 70px;
         }
         
         .checkbox-group {
             display: flex;
             align-items: center;
-            gap: 4px;
-            font-size: 10px;
-            color: #000000; /* BLACK TEXT */
+            gap: 6px;
+            font-size: 11px;
+            color: #000000;
+            width: 100%;
         }
         
         .checkbox-group input[type="checkbox"] {
@@ -265,16 +274,13 @@
             height: 14px;
             margin: 0;
             accent-color: #fc731c;
+            cursor: pointer;
         }
         
-        .approve-checkbox {
-            color: #2e7d32;
-            font-weight: 600;
-        }
-        
-        .pend-checkbox {
-            color: #d32f2f;
-            font-weight: 600;
+        .checkbox-group label {
+            cursor: pointer;
+            font-weight: 500;
+            color: #000000;
         }
         
         /* DELETE BUTTON - ORANGE */
@@ -300,7 +306,7 @@
             cursor: not-allowed;
         }
         
-        /* GRAND TOTAL ROW - CENTERED, WHITE BOLD TEXT, LARGER FONT */
+        /* GRAND TOTAL ROW - CENTERED, WHITE BOLD TEXT WITH ICON */
         .total-row {
             background: linear-gradient(to right, #601a9b, #4a148c);
             color: white;
@@ -308,21 +314,27 @@
         }
         
         .total-label {
-            text-align: right;
+            text-align: center;
             padding-right: 10px !important;
             font-size: 14px;
             color: white;
             font-weight: 700;
-            text-align: center; /* CENTERED */
         }
         
         .grand-total {
-            font-size: 16px; /* LARGER FONT */
-            color: white; /* WHITE TEXT */
-            font-weight: 700; /* BOLD */
-            text-align: center; /* CENTERED */
+            font-size: 16px;
+            color: white;
+            font-weight: 700;
+            text-align: center;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
             letter-spacing: 0.5px;
+        }
+        
+        /* ICON IN GRAND TOTAL */
+        .total-icon {
+            display: inline-block;
+            margin-right: 6px;
+            font-size: 16px;
         }
         
         /* TABLE FOOTER - YELLOW BACKGROUND */
@@ -401,11 +413,6 @@
         .table-wrapper::-webkit-scrollbar-thumb:hover {
             background: #a48bc0;
         }
-        
-        /* CHECKBOX EXCLUSIVITY - ONLY ONE CAN BE SELECTED */
-        .checkbox-group input[type="checkbox"]:checked + .other-checkbox {
-            opacity: 0.5;
-        }
     </style>
 </head>
 <body>
@@ -436,7 +443,9 @@
                     </tbody>
                     <tfoot>
                         <tr class="total-row">
-                            <td colspan="6" class="total-label">GRAND TOTAL:</td>
+                            <td colspan="6" class="total-label">
+                                <span class="total-icon">🎯</span> GRAND TOTAL:
+                            </td>
                             <td id="grandTotal" class="grand-total">$0.00</td>
                             <td></td>
                             <td></td>
@@ -520,10 +529,12 @@
                                data-row="${rowId}">
                     </div>
                 </td>
-                <td class="row-total" id="row-total-${rowId}">$0.00</td>
+                <td>
+                    <div class="row-total" id="row-total-${rowId}">$0.00</div>
+                </td>
                 <td>
                     <div class="status-checkboxes">
-                        <div class="checkbox-group approve-checkbox">
+                        <div class="checkbox-group">
                             <input type="checkbox" 
                                    id="approve-${rowId}" 
                                    class="status-approve"
@@ -531,7 +542,7 @@
                                    onchange="updateStatus('${rowId}', 'approve', this.checked)">
                             <label for="approve-${rowId}">Approve</label>
                         </div>
-                        <div class="checkbox-group pend-checkbox">
+                        <div class="checkbox-group">
                             <input type="checkbox" 
                                    id="pend-${rowId}" 
                                    class="status-pend"
