@@ -1,0 +1,193 @@
+.widget-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.order-table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #4a6fa5;
+    color: white;
+}
+
+.table-header h3 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.add-row-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.add-row-btn:hover {
+    background-color: #218838;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.order-table th {
+    background-color: #f1f5f9;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #334155;
+    border-bottom: 2px solid #e2e8f0;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.order-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+}
+
+.order-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.order-table input,
+.order-table textarea,
+.order-table select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.order-table input:focus,
+.order-table textarea:focus,
+.order-table select:focus {
+    outline: none;
+    border-color: #4a6fa5;
+    box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+}
+
+.order-table textarea {
+    resize: vertical;
+    min-height: 60px;
+    font-family: inherit;
+    line-height: 1.4;
+}
+
+.row-total {
+    font-weight: 600;
+    color: #1e40af;
+    min-width: 100px;
+    text-align: right;
+    padding-right: 20px !important;
+}
+
+.delete-btn {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.2s;
+    width: 100%;
+    max-width: 80px;
+}
+
+.delete-btn:hover {
+    background-color: #dc2626;
+}
+
+.delete-btn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.total-row {
+    background-color: #f1f5f9;
+    font-weight: 600;
+}
+
+.total-label {
+    text-align: right;
+    padding-right: 20px !important;
+    font-size: 16px;
+    color: #334155;
+}
+
+.grand-total {
+    font-size: 18px;
+    color: #1e40af;
+    text-align: right;
+    padding-right: 20px !important;
+}
+
+.table-footer {
+    padding: 12px 20px;
+    background-color: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    color: #64748b;
+    font-size: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .widget-container {
+        padding: 10px;
+    }
+    
+    .table-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    
+    .add-row-btn {
+        align-self: stretch;
+        text-align: center;
+    }
+}
+
+/* Input validation styles */
+.order-table input:invalid,
+.order-table textarea:invalid {
+    border-color: #ef4444;
+}
+
+.order-table input:valid,
+.order-table textarea:valid {
+    border-color: #10b981;
+}
+
+/* Auto-resize textarea */
+.auto-resize {
+    resize: none;
+    overflow: hidden;
+    min-height: 60px;
+}
