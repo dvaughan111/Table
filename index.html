@@ -11,11 +11,10 @@
             margin: 0; 
             padding: 0; 
         }
-        /* In your Jotform iframe styling */
-style="border: none; margin: 0; padding: 0; width: 100%;"
+        
         .widget-container {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            padding: 6px 2px; /* REDUCED LEFT/RIGHT PADDING */
+            padding: 6px 2px;
             max-width: 850px;
             margin: 0 auto;
             background-color: #f9f9f9;
@@ -27,7 +26,7 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
             box-shadow: 0 1px 6px rgba(96, 26, 155, 0.1);
             overflow: hidden;
             border: 1px solid #e0d4e9;
-            margin: 0 1px; /* MINIMAL SIDE MARGINS */
+            margin: 0 1px;
         }
         
         /* TABLE HEADER */
@@ -62,10 +61,10 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
             background-color: #e56418;
         }
         
-        /* TABLE - NO SIDE MARGINS */
+        /* TABLE */
         .table-wrapper {
             overflow-x: auto;
-            margin: 0 -1px; /* NEGATIVE MARGIN TO EXTEND TO EDGES */
+            margin: 0 -1px;
         }
         
         .order-table {
@@ -75,10 +74,10 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
             font-size: 11px;
         }
         
-        /* TABLE HEADERS - MINIMAL PADDING */
+        /* TABLE HEADERS */
         .order-table th {
             background-color: #f8f3fc;
-            padding: 6px 4px; /* MORE VERTICAL, LESS HORIZONTAL */
+            padding: 6px 4px;
             text-align: left;
             font-weight: 600;
             color: #601a9b;
@@ -90,15 +89,15 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
             text-overflow: ellipsis;
         }
         
-        /* TABLE CELLS - MINIMAL PADDING */
+        /* TABLE CELLS */
         .order-table td {
-            padding: 6px 4px; /* MORE VERTICAL, LESS HORIZONTAL */
+            padding: 6px 4px;
             border-bottom: 1px solid #f0e6f6;
             vertical-align: top;
             color: #000000;
         }
         
-        /* WIDER COLUMN WIDTHS NOW (TOTAL: ~800px) */
+        /* ADJUSTED COLUMN WIDTHS - TOTAL: ~820px */
         .order-table th:nth-child(1), /* Qty */
         .order-table td:nth-child(1) {
             width: 45px;
@@ -109,9 +108,9 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
         
         .order-table th:nth-child(2), /* Description */
         .order-table td:nth-child(2) {
-            width: 140px;
-            min-width: 140px;
-            max-width: 140px;
+            width: 150px; /* Slightly wider for descriptions */
+            min-width: 150px;
+            max-width: 150px;
         }
         
         .order-table th:nth-child(3), /* Reason */
@@ -137,44 +136,45 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
         
         .order-table th:nth-child(6), /* Cost */
         .order-table td:nth-child(6) {
-            width: 75px;
-            min-width: 75px;
-            max-width: 75px;
+            width: 70px; /* Fits $999.99 */
+            min-width: 70px;
+            max-width: 70px;
             text-align: center;
         }
         
-        .order-table th:nth-child(7), /* Row Total */
+        .order-table th:nth-child(7), /* Row Total - REDUCED WIDTH */
         .order-table td:nth-child(7) {
-            width: 80px;
-            min-width: 80px;
-            max-width: 80px;
+            width: 65px; /* REDUCED: Fits $9,999.99 */
+            min-width: 65px;
+            max-width: 65px;
             text-align: right;
+            font-size: 10px;
         }
         
-        .order-table th:nth-child(8), /* Status - WIDER FOR CHECKBOXES */
+        .order-table th:nth-child(8), /* Status */
         .order-table td:nth-child(8) {
-            width: 95px;
-            min-width: 95px;
-            max-width: 95px;
+            width: 100px; /* WIDER for better checkbox visibility */
+            min-width: 100px;
+            max-width: 100px;
             text-align: left;
         }
         
         .order-table th:nth-child(9), /* Delete */
         .order-table td:nth-child(9) {
-            width: 50px;
-            min-width: 50px;
-            max-width: 50px;
+            width: 55px;
+            min-width: 55px;
+            max-width: 55px;
             text-align: center;
         }
         
-        /* TOTAL WIDTH: 45+140+130+120+110+75+80+95+50 = 845px */
+        /* TOTAL WIDTH: 45+150+130+120+110+70+65+100+55 = 845px */
         
-        /* INPUTS - MINIMAL HORIZONTAL PADDING */
+        /* INPUTS */
         .order-table input,
         .order-table textarea,
         .order-table select {
             width: 100%;
-            padding: 5px 3px; /* MORE VERTICAL, LESS HORIZONTAL */
+            padding: 5px 3px;
             border: 1px solid #d8c8e4;
             border-radius: 2px;
             font-size: 11px;
@@ -241,11 +241,11 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
             color: #000000;
         }
         
-        /* ROW TOTAL */
+        /* ROW TOTAL - COMPACT FOR NUMBERS */
         .row-total {
             font-weight: 600;
             color: #000000;
-            font-size: 11px;
+            font-size: 10px; /* Smaller font for totals */
             padding: 5px 3px !important;
             display: block;
             text-align: right;
@@ -254,9 +254,11 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
             border-radius: 2px;
             min-height: 28px;
             line-height: 1.2;
+            font-family: 'Courier New', monospace; /* Monospace for numbers */
+            letter-spacing: -0.5px; /* Tighter letter spacing */
         }
         
-        /* STATUS CHECKBOXES - MORE SPACIOUS */
+        /* STATUS CHECKBOXES - CLEAR VISIBILITY */
         .status-checkboxes {
             display: flex;
             flex-direction: column;
@@ -272,7 +274,7 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
         .checkbox-group {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             font-size: 10px;
             color: #000000;
             width: 100%;
@@ -334,18 +336,19 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
         }
         
         .grand-total {
-            font-size: 14px;
+            font-size: 13px; /* Slightly smaller */
             color: white;
             font-weight: 700;
             text-align: center;
             padding: 6px 4px !important;
+            font-family: 'Courier New', monospace; /* Monospace for numbers */
         }
         
         /* ICON IN GRAND TOTAL */
         .total-icon {
             display: inline-block;
             margin-right: 5px;
-            font-size: 13px;
+            font-size: 12px;
         }
         
         /* TABLE FOOTER */
@@ -358,15 +361,15 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
             text-align: center;
         }
         
-        /* REMOVE HORIZONTAL SCROLL ON WIDE ENOUGH SCREENS */
-        @media (min-width: 860px) {
+        /* NO HORIZONTAL SCROLL ON WIDE SCREENS */
+        @media (min-width: 830px) {
             .table-wrapper {
                 overflow-x: hidden;
             }
         }
         
-        /* RESPONSIVE FOR SMALLER SCREENS */
-        @media (max-width: 859px) {
+        /* RESPONSIVE */
+        @media (max-width: 829px) {
             .widget-container {
                 padding: 5px 1px;
             }
@@ -380,50 +383,16 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
             }
         }
         
-        /* SPECIAL: EVEN MORE COMPACT IF NEEDED */
-        .compact-mode .order-table th,
-        .compact-mode .order-table td {
-            padding: 5px 3px;
-        }
-        
-        .compact-mode .order-table input,
-        .compact-mode .order-table textarea,
-        .compact-mode .order-table select {
-            padding: 4px 2px;
+        /* COMPACT NUMBER DISPLAY */
+        .compact-number {
             font-size: 10px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: -0.5px;
         }
         
-        /* SCROLLBAR - THIN */
-        .table-wrapper::-webkit-scrollbar {
-            height: 4px;
-        }
-        
-        .table-wrapper::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 2px;
-        }
-        
-        .table-wrapper::-webkit-scrollbar-thumb {
-            background: #c4b1d6;
-            border-radius: 2px;
-        }
-        
-        .table-wrapper::-webkit-scrollbar-thumb:hover {
-            background: #a48bc0;
-        }
-        
-        /* HEADER ABBREVIATIONS FOR NARROW SPACES */
-        .header-abbr {
-            display: none;
-        }
-        
-        @media (max-width: 600px) {
-            .header-full {
-                display: none;
-            }
-            .header-abbr {
-                display: inline;
-            }
+        /* MONOSPACE FOR ALL NUMBERS */
+        input[type="number"] {
+            font-family: 'Courier New', monospace;
         }
     </style>
 </head>
@@ -441,10 +410,10 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
                         <tr>
                             <th>QTY</th>
                             <th>DESCRIPTION</th>
-                            <th><span class="header-full">REASON</span><span class="header-abbr">REASON</span></th>
-                            <th><span class="header-full">LINK</span><span class="header-abbr">LINK</span></th>
-                            <th><span class="header-full">ORGANIZATION</span><span class="header-abbr">ORG</span></th>
-                            <th><span class="header-full">COST/ITEM</span><span class="header-abbr">COST</span></th>
+                            <th>REASON</th>
+                            <th>LINK</th>
+                            <th>ORGANIZATION</th>
+                            <th>COST/ITEM</th>
                             <th>TOTAL</th>
                             <th>STATUS</th>
                             <th>&nbsp;</th>
@@ -476,7 +445,7 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
             initializeTable();
             document.getElementById('addRowBtn').addEventListener('click', addRow);
             
-            // Initialize auto-resize for textareas
+            // Initialize auto-resize
             setTimeout(() => {
                 document.querySelectorAll('.auto-resize').forEach(textarea => {
                     autoResizeTextarea(textarea);
@@ -545,7 +514,7 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
                     </div>
                 </td>
                 <td>
-                    <div class="row-total" id="row-total-${rowId}">$0.00</div>
+                    <div class="row-total compact-number" id="row-total-${rowId}">$0.00</div>
                 </td>
                 <td>
                     <div class="status-checkboxes">
@@ -650,11 +619,19 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
         }
 
         function formatCurrency(amount) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2
-            }).format(amount);
+            // Use compact formatting for large numbers
+            if (amount >= 10000) {
+                return '$' + amount.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            } else {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 2
+                }).format(amount);
+            }
         }
 
         window.autoResizeTextarea = function(textarea) {
@@ -673,11 +650,6 @@ style="border: none; margin: 0; padding: 0; width: 100%;"
                     otherCheckbox.checked = false;
                 }
             }
-        };
-        
-        // Optional: Toggle compact mode
-        window.toggleCompactMode = function() {
-            document.querySelector('.order-table-container').classList.toggle('compact-mode');
         };
     </script>
 </body>
