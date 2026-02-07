@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('addRowBtn').addEventListener('click', addRow);
     
     // Initialize Jotform integration if in Jotform environment
-    if (typeof JotForm !== 'undefined') {
+    if (typeof Jotform !== 'undefined') {
         setupJotformIntegration();
     }
 });
@@ -59,9 +59,9 @@ function addRow() {
         <td>
             <select class="organization-select" data-row="${rowId}">
                 <option value="">Select Organization</option>
-                <option value="org1">Organization 1</option>
-                <option value="org2">Organization 2</option>
-                <option value="org3">Organization 3</option>
+                <option value="spark_home_health">Spark Home Health</option>
+                <option value="spark_therapy">Spark Therapy</option>
+                <option value="both">Both</option>
                 <option value="other">Other</option>
             </select>
         </td>
@@ -109,6 +109,14 @@ function addRow() {
             btn.disabled = false;
         });
     }
+    
+    // Auto-resize textareas in this new row
+    setTimeout(() => {
+        const textareas = row.querySelectorAll('.auto-resize');
+        textareas.forEach(textarea => {
+            autoResizeTextarea(textarea);
+        });
+    }, 10);
 }
 
 function deleteRow(rowId) {
@@ -239,3 +247,12 @@ function updateJotformData() {
 // Export functions for Jotform
 window.getTableData = updateJotformData;
 window.addTableRow = addRow;
+window.deleteTableRow = deleteRow;
+window.autoResizeTextarea = autoResizeTextarea;
+
+// Initialize all textareas on load
+window.addEventListener('load', function() {
+    document.querySelectorAll('.auto-resize').forEach(textarea => {
+        autoResizeTextarea(textarea);
+    });
+});
