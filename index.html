@@ -5,199 +5,207 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Form</title>
     <style>
-        /* NUCLEAR OPTION - MAXIMUM COMPACT */
+        /* CLEAN, PROFESSIONAL STYLE WITH YOUR SPECIFIC CHANGES */
         * { 
             box-sizing: border-box; 
-            margin: 0 !important; 
-            padding: 0 !important; 
-            border-spacing: 0 !important;
+            margin: 0; 
+            padding: 0; 
         }
         
-        html, body {
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 100% !important;
-            overflow-x: hidden !important;
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
         }
         
         .widget-container {
-            font-family: Arial, sans-serif;
-            padding: 2px 0 !important;
-            width: 100% !important;
-            max-width: 850px !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 10px 5px;
+            max-width: 850px;
+            margin: 0 auto;
             background-color: #f9f9f9;
         }
         
         .order-table-container {
             background: white;
-            box-shadow: 0 1px 3px rgba(96, 26, 155, 0.1);
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(96, 26, 155, 0.1);
             overflow: hidden;
             border: 1px solid #e0d4e9;
-            width: 100% !important;
         }
         
-        /* TABLE HEADER */
+        /* TABLE HEADER - PURPLE */
         .table-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 8px !important;
-            background: #601a9b;
+            padding: 12px 15px;
+            background: linear-gradient(135deg, #601a9b 0%, #4a148c 100%);
             color: white;
         }
         
         .table-header h3 {
-            margin: 0 !important;
+            margin: 0;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 16px;
         }
         
         .add-row-btn {
             background-color: #fc731c;
             color: white;
             border: none;
-            padding: 3px 6px !important;
-            border-radius: 2px;
+            padding: 6px 12px;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 10px;
+            font-size: 13px;
+            transition: all 0.2s ease;
         }
         
-        /* TABLE - EXTREMELY TIGHT */
+        .add-row-btn:hover {
+            background-color: #e56418;
+        }
+        
+        /* TABLE */
         .table-wrapper {
             overflow-x: auto;
-            width: 100% !important;
         }
         
         .order-table {
-            width: 100% !important;
-            border-collapse: collapse !important;
-            table-layout: fixed !important;
-            font-size: 10px !important;
-            min-width: 800px !important;
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 12px;
         }
         
-        /* TABLE HEADERS - ULTRA COMPACT */
+        /* TABLE HEADERS - PURPLE ACCENT */
         .order-table th {
             background-color: #f8f3fc;
-            padding: 4px 2px !important;
+            padding: 8px 6px;
             text-align: left;
             font-weight: 600;
             color: #601a9b;
-            border-bottom: 1px solid #e0d4e9;
-            font-size: 9px;
+            border-bottom: 2px solid #e0d4e9;
+            font-size: 11px;
             text-transform: uppercase;
             white-space: nowrap;
-            overflow: hidden;
         }
         
-        /* TABLE CELLS - ULTRA COMPACT */
+        /* TABLE CELLS */
         .order-table td {
-            padding: 4px 2px !important;
+            padding: 8px 6px;
             border-bottom: 1px solid #f0e6f6;
             vertical-align: top;
             color: #000000;
         }
         
-        /* EXTREMELY NARROW COLUMNS - TOTAL: ~800px */
+        /* COLUMN WIDTHS - WITH NARROWER DESCRIPTION AND REASON COLUMNS */
         .order-table th:nth-child(1), /* Qty */
         .order-table td:nth-child(1) {
-            width: 40px !important;
-            min-width: 40px !important;
-            max-width: 40px !important;
+            width: 50px;
+            min-width: 50px;
+            max-width: 50px;
             text-align: center;
         }
         
-        .order-table th:nth-child(2), /* Description */
+        .order-table th:nth-child(2), /* Description - NARROWER */
         .order-table td:nth-child(2) {
-            width: 150px !important;
-            min-width: 150px !important;
-            max-width: 150px !important;
+            width: 140px; /* NARROWER */
+            min-width: 140px;
+            max-width: 140px;
         }
         
-        .order-table th:nth-child(3), /* Reason */
+        .order-table th:nth-child(3), /* Reason - NARROWER */
         .order-table td:nth-child(3) {
-            width: 130px !important;
-            min-width: 130px !important;
-            max-width: 130px !important;
+            width: 120px; /* NARROWER */
+            min-width: 120px;
+            max-width: 120px;
         }
         
         .order-table th:nth-child(4), /* Link */
         .order-table td:nth-child(4) {
-            width: 120px !important;
-            min-width: 120px !important;
-            max-width: 120px !important;
+            width: 130px;
+            min-width: 130px;
+            max-width: 130px;
         }
         
         .order-table th:nth-child(5), /* Organization */
         .order-table td:nth-child(5) {
-            width: 110px !important;
-            min-width: 110px !important;
-            max-width: 110px !important;
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
         }
         
         .order-table th:nth-child(6), /* Cost */
         .order-table td:nth-child(6) {
-            width: 65px !important;
-            min-width: 65px !important;
-            max-width: 65px !important;
+            width: 75px;
+            min-width: 75px;
+            max-width: 75px;
             text-align: center;
         }
         
-        .order-table th:nth-child(7), /* Row Total - EXTREMELY NARROW */
+        .order-table th:nth-child(7), /* Row Total */
         .order-table td:nth-child(7) {
-            width: 50px !important;  /* SUPER NARROW */
-            min-width: 50px !important;
-            max-width: 50px !important;
+            width: 70px;
+            min-width: 70px;
+            max-width: 70px;
             text-align: right;
         }
         
         .order-table th:nth-child(8), /* Status */
         .order-table td:nth-child(8) {
-            width: 90px !important;
-            min-width: 90px !important;
-            max-width: 90px !important;
+            width: 100px;
+            min-width: 100px;
+            max-width: 100px;
             text-align: left;
         }
         
         .order-table th:nth-child(9), /* Delete */
         .order-table td:nth-child(9) {
-            width: 45px !important;
-            min-width: 45px !important;
-            max-width: 45px !important;
+            width: 60px;
+            min-width: 60px;
+            max-width: 60px;
             text-align: center;
         }
         
-        /* TOTAL WIDTH: 40+150+130+120+110+65+50+90+45 = 800px */
+        /* TOTAL WIDTH: 50+140+120+130+100+75+70+100+60 = 845px */
         
-        /* INPUTS - EXTREMELY COMPACT */
+        /* INPUTS */
         .order-table input,
         .order-table textarea,
         .order-table select {
-            width: 100% !important;
-            padding: 3px 1px !important;
+            width: 100%;
+            padding: 6px 5px;
             border: 1px solid #d8c8e4;
-            border-radius: 1px;
-            font-size: 9px !important;
+            border-radius: 3px;
+            font-size: 12px;
             color: #000000;
             background-color: #fefcff;
-            font-family: Arial, sans-serif;
-            line-height: 1.1;
-            margin: 0 !important;
+            font-family: inherit;
+            line-height: 1.3;
+        }
+        
+        .order-table input:focus,
+        .order-table textarea:focus,
+        .order-table select:focus {
+            outline: none;
+            border-color: #fc731c;
+            box-shadow: 0 0 0 2px rgba(252, 115, 28, 0.1);
+            background-color: white;
         }
         
         /* QUANTITY INPUT */
         .order-table td:nth-child(1) input {
-            padding: 3px 0 !important;
+            padding: 6px 3px;
             text-align: center;
-            font-size: 9px;
+            font-size: 12px;
             font-weight: 600;
-            max-width: 30px;
-            margin: 0 auto !important;
+            max-width: 40px;
+            margin: 0 auto;
             display: block;
         }
         
-        /* COST INPUT - TINY DOLLAR SIGN */
+        /* COST INPUT - WITH DOLLAR SIGN */
         .cost-input-wrapper {
             position: relative;
             width: 100%;
@@ -206,78 +214,75 @@
         .cost-input-wrapper::before {
             content: "$";
             position: absolute;
-            left: 2px;
+            left: 5px;
             top: 50%;
             transform: translateY(-50%);
             color: #601a9b;
             font-weight: 600;
             z-index: 1;
             pointer-events: none;
-            font-size: 8px;
+            font-size: 11px;
         }
         
         .order-table td:nth-child(6) input {
-            padding: 3px 2px 3px 10px !important;
+            padding: 6px 5px 6px 16px;
             text-align: right;
-            font-size: 9px;
+            font-size: 12px;
             font-weight: 600;
             width: 100%;
             color: #601a9b;
         }
         
-        /* TEXTAREAS */
+        /* TEXTAREAS - FOR NARROWER COLUMNS */
         .order-table textarea {
             resize: vertical;
-            min-height: 40px;
-            line-height: 1.1;
-            font-size: 9px;
+            min-height: 50px;
+            line-height: 1.3;
+            font-size: 12px;
             color: #000000;
         }
         
-        /* ROW TOTAL - EXTREMELY COMPACT */
+        /* ROW TOTAL */
         .row-total {
             font-weight: 600;
             color: #000000;
-            font-size: 9px !important;
-            padding: 3px 1px !important;
+            font-size: 12px;
+            padding: 6px 5px !important;
             display: block;
             text-align: right;
             background-color: #fefcff;
             border: 1px solid #d8c8e4;
-            border-radius: 1px;
-            min-height: 24px;
-            line-height: 1.1;
-            font-family: 'Courier New', monospace;
-            overflow: hidden;
-            white-space: nowrap;
+            border-radius: 3px;
+            min-height: 30px;
+            line-height: 1.3;
         }
         
-        /* STATUS CHECKBOXES - COMPACT */
+        /* STATUS CHECKBOXES - CLEAN DESIGN */
         .status-checkboxes {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
             align-items: flex-start;
-            padding: 3px !important;
+            padding: 6px;
             background-color: #fefcff;
             border: 1px solid #d8c8e4;
-            border-radius: 1px;
-            min-height: 50px;
+            border-radius: 3px;
+            min-height: 60px;
         }
         
         .checkbox-group {
             display: flex;
             align-items: center;
-            gap: 3px;
-            font-size: 8px;
+            gap: 5px;
+            font-size: 11px;
             color: #000000;
             width: 100%;
         }
         
         .checkbox-group input[type="checkbox"] {
-            width: 10px;
-            height: 10px;
-            margin: 0 !important;
+            width: 13px;
+            height: 13px;
+            margin: 0;
             accent-color: #fc731c;
             cursor: pointer;
         }
@@ -294,75 +299,78 @@
             background-color: #fc731c;
             color: white;
             border: none;
-            padding: 2px 4px !important;
-            border-radius: 1px;
+            padding: 5px 8px;
+            border-radius: 3px;
             cursor: pointer;
-            font-size: 8px;
+            font-size: 11px;
             font-weight: 600;
+            transition: all 0.2s ease;
             width: 100%;
-            white-space: nowrap;
         }
         
-        /* GRAND TOTAL */
+        .delete-btn:hover {
+            background-color: #e56418;
+        }
+        
+        .delete-btn:disabled {
+            background-color: #c4b1d6;
+            cursor: not-allowed;
+        }
+        
+        /* GRAND TOTAL ROW */
         .total-row {
-            background: #601a9b;
+            background: linear-gradient(to right, #601a9b, #4a148c);
             color: white;
             font-weight: 700;
         }
         
         .total-label {
             text-align: center;
-            padding: 4px 2px !important;
-            font-size: 10px;
+            padding: 8px 5px !important;
+            font-size: 13px;
             color: white;
             font-weight: 700;
         }
         
         .grand-total {
-            font-size: 11px;
+            font-size: 14px;
             color: white;
             font-weight: 700;
             text-align: center;
-            padding: 4px 2px !important;
-            font-family: 'Courier New', monospace;
+            padding: 8px 5px !important;
         }
         
-        /* ICON */
+        /* ICON IN GRAND TOTAL */
         .total-icon {
             display: inline-block;
-            margin-right: 2px !important;
-            font-size: 10px;
+            margin-right: 5px;
+            font-size: 13px;
         }
         
         /* TABLE FOOTER */
         .table-footer {
-            padding: 4px 8px !important;
+            padding: 8px 15px;
             background-color: #fef7e6;
             border-top: 1px solid #f4ee38;
             color: #7b5fa1;
-            font-size: 8px;
+            font-size: 11px;
             text-align: center;
         }
         
-        /* FORCE NO SCROLL ON DESKTOP */
-        @media (min-width: 810px) {
+        /* REMOVE HORIZONTAL SCROLL ON DESKTOP */
+        @media (min-width: 850px) {
             .table-wrapper {
-                overflow-x: hidden !important;
+                overflow-x: hidden;
             }
-        }
-        
-        /* HIDE SCROLLBAR BUT KEEP FUNCTIONALITY */
-        .table-wrapper::-webkit-scrollbar {
-            display: none;
         }
     </style>
 </head>
-<body style="margin:0!important;padding:0!important;">
+<body>
     <div class="widget-container">
         <div class="order-table-container">
             <div class="table-header">
-                <h3>Order Form</h3>
-                <button type="button" id="addRowBtn" class="add-row-btn">+ Add</button>
+                <h3>📋 Order Form</h3>
+                <button type="button" id="addRowBtn" class="add-row-btn">+ Add Item</button>
             </div>
             
             <div class="table-wrapper">
@@ -370,17 +378,19 @@
                     <thead>
                         <tr>
                             <th>QTY</th>
-                            <th>DESC</th>
+                            <th>DESCRIPTION</th>
                             <th>REASON</th>
-                            <th>LINK</th>
+                            <th>PRODUCT LINK</th>
                             <th>ORG</th>
-                            <th>COST</th>
+                            <th>COST/ITEM</th>
                             <th>TOTAL</th>
                             <th>STATUS</th>
-                            <th>DEL</th>
+                            <th>&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody"></tbody>
+                    <tbody id="tableBody">
+                        <!-- Rows will be generated here -->
+                    </tbody>
                     <tfoot>
                         <tr class="total-row">
                             <td colspan="7" class="total-label">
@@ -394,7 +404,7 @@
             </div>
             
             <div class="table-footer">
-                Auto-updating
+                ✨ Total updates automatically
             </div>
         </div>
     </div>
@@ -403,12 +413,20 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeTable();
             document.getElementById('addRowBtn').addEventListener('click', addRow);
+            
+            // Initialize auto-resize for textareas
+            setTimeout(() => {
+                document.querySelectorAll('textarea').forEach(textarea => {
+                    autoResizeTextarea(textarea);
+                });
+            }, 100);
         });
 
         function initializeTable() {
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = '';
             
+            // Create 5 initial rows
             for (let i = 0; i < 5; i++) {
                 addRow();
             }
@@ -418,57 +436,99 @@
 
         function addRow() {
             const tableBody = document.getElementById('tableBody');
-            const rowId = Date.now();
+            const rowId = Date.now() + Math.random();
             
             const row = document.createElement('tr');
             row.id = `row-${rowId}`;
             row.innerHTML = `
-                <td><input type="number" min="1" value="1" class="quantity-input" data-row="${rowId}"></td>
-                <td><textarea class="description-input" placeholder="Description" data-row="${rowId}" rows="2"></textarea></td>
-                <td><textarea class="reason-input" placeholder="Reason" data-row="${rowId}" rows="2"></textarea></td>
-                <td><input type="url" class="link-input" placeholder="URL" data-row="${rowId}"></td>
+                <td>
+                    <input type="number" 
+                           min="1" 
+                           value="1" 
+                           class="quantity-input"
+                           data-row="${rowId}">
+                </td>
+                <td>
+                    <textarea class="description-input" 
+                              placeholder="Item description" 
+                              data-row="${rowId}"
+                              rows="2"></textarea>
+                </td>
+                <td>
+                    <textarea class="reason-input" 
+                              placeholder="Reason for request" 
+                              data-row="${rowId}"
+                              rows="2"></textarea>
+                </td>
+                <td>
+                    <input type="url" 
+                           class="link-input" 
+                           placeholder="https://example.com"
+                           data-row="${rowId}">
+                </td>
                 <td>
                     <select class="organization-select" data-row="${rowId}">
-                        <option value="">Select</option>
-                        <option value="spark_home_health">Home Health</option>
-                        <option value="spark_therapy">Therapy</option>
+                        <option value="spark_home_health">Spark HH</option>
+                        <option value="spark_therapy">Spark Therapy</option>
                         <option value="both">Both</option>
-                        <option value="other">Other</option>
                     </select>
                 </td>
                 <td>
                     <div class="cost-input-wrapper">
-                        <input type="number" step="0.01" min="0" value="0.00" class="cost-input" data-row="${rowId}">
+                        <input type="number" 
+                               step="0.01" 
+                               min="0" 
+                               value="0.00" 
+                               class="cost-input"
+                               data-row="${rowId}">
                     </div>
                 </td>
-                <td><div class="row-total" id="row-total-${rowId}">$0.00</div></td>
+                <td>
+                    <div class="row-total" id="row-total-${rowId}">$0.00</div>
+                </td>
                 <td>
                     <div class="status-checkboxes">
                         <div class="checkbox-group">
-                            <input type="checkbox" id="approve-${rowId}" class="status-approve" data-row="${rowId}" onchange="updateStatus('${rowId}', 'approve', this.checked)">
-                            <label for="approve-${rowId}">✓ Approve</label>
+                            <input type="checkbox" 
+                                   id="approve-${rowId}" 
+                                   class="status-approve"
+                                   data-row="${rowId}"
+                                   onchange="updateStatus('${rowId}', 'approve', this.checked)">
+                            <label for="approve-${rowId}">Approve</label>
                         </div>
                         <div class="checkbox-group">
-                            <input type="checkbox" id="pend-${rowId}" class="status-pend" data-row="${rowId}" onchange="updateStatus('${rowId}', 'pend', this.checked)">
-                            <label for="pend-${rowId}">⌛ Pend</label>
+                            <input type="checkbox" 
+                                   id="pend-${rowId}" 
+                                   class="status-pend"
+                                   data-row="${rowId}"
+                                   onchange="updateStatus('${rowId}', 'pend', this.checked)">
+                            <label for="pend-${rowId}">Pend</label>
                         </div>
                     </div>
                 </td>
-                <td><button type="button" class="delete-btn" onclick="deleteRow('${rowId}')" ${document.querySelectorAll('#tableBody tr').length <= 1 ? 'disabled' : ''}>X</button></td>
+                <td>
+                    <button type="button" 
+                            class="delete-btn" 
+                            onclick="deleteRow('${rowId}')"
+                            ${document.querySelectorAll('#tableBody tr').length <= 1 ? 'disabled' : ''}>
+                        Delete
+                    </button>
+                </td>
             `;
             
             tableBody.appendChild(row);
             
-            // Auto-resize
+            // Auto-resize textareas
             const textareas = row.querySelectorAll('textarea');
             textareas.forEach(textarea => {
                 textarea.addEventListener('input', function() {
-                    this.style.height = 'auto';
-                    this.style.height = (this.scrollHeight) + 'px';
+                    autoResizeTextarea(this);
                 });
+                // Set initial height
+                setTimeout(() => autoResizeTextarea(textarea), 10);
             });
             
-            // Calculations
+            // Add calculation listeners
             const inputs = row.querySelectorAll('.quantity-input, .cost-input');
             inputs.forEach(input => {
                 const updateHandler = () => {
@@ -479,8 +539,16 @@
                 input.addEventListener('change', updateHandler);
             });
             
+            // Initial calculation
             updateRowTotal(rowId);
             updateGrandTotal();
+            
+            // Enable delete buttons if multiple rows
+            if (document.querySelectorAll('#tableBody tr').length > 1) {
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.disabled = false;
+                });
+            }
         }
 
         window.deleteRow = function(rowId) {
@@ -488,6 +556,10 @@
             if (row && document.querySelectorAll('#tableBody tr').length > 1) {
                 row.remove();
                 updateGrandTotal();
+                
+                if (document.querySelectorAll('#tableBody tr').length === 1) {
+                    document.querySelector('.delete-btn').disabled = true;
+                }
             }
         };
 
@@ -502,7 +574,7 @@
             const costPerItem = parseFloat(costInput.value) || 0;
             const rowTotal = quantity * costPerItem;
             
-            rowTotalElement.textContent = '$' + rowTotal.toFixed(2);
+            rowTotalElement.textContent = formatCurrency(rowTotal);
         }
 
         function updateGrandTotal() {
@@ -515,7 +587,20 @@
                 grandTotal += value;
             });
             
-            document.getElementById('grandTotal').textContent = '$' + grandTotal.toFixed(2);
+            document.getElementById('grandTotal').textContent = formatCurrency(grandTotal);
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2
+            }).format(amount);
+        }
+
+        window.autoResizeTextarea = function(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 100) + 'px';
         }
 
         window.updateStatus = function(rowId, statusType, isChecked) {
