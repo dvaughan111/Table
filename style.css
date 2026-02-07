@@ -1,13 +1,13 @@
 .widget-container {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    padding: 20px;
+    padding: 15px;
     background-color: #f8f9fa;
 }
 
 .order-table-container {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
     overflow: hidden;
 }
 
@@ -15,7 +15,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
     background-color: #4a6fa5;
     color: white;
 }
@@ -23,16 +23,18 @@
 .table-header h3 {
     margin: 0;
     font-weight: 600;
+    font-size: 16px;
 }
 
 .add-row-btn {
     background-color: #28a745;
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 6px 12px;
     border-radius: 4px;
     cursor: pointer;
     font-weight: 500;
+    font-size: 13px;
     transition: background-color 0.2s;
 }
 
@@ -47,25 +49,81 @@
 .order-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 800px;
+    min-width: 700px;
+    table-layout: fixed;
 }
 
 .order-table th {
     background-color: #f1f5f9;
-    padding: 12px 16px;
+    padding: 10px 8px;
     text-align: left;
     font-weight: 600;
     color: #334155;
     border-bottom: 2px solid #e2e8f0;
-    font-size: 14px;
+    font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
 }
 
 .order-table td {
-    padding: 12px 16px;
+    padding: 8px;
     border-bottom: 1px solid #e2e8f0;
     vertical-align: top;
+}
+
+/* Column Width Adjustments */
+.order-table th:nth-child(1), /* Quantity */
+.order-table td:nth-child(1) {
+    width: 80px !important; /* Much narrower for quantity */
+    min-width: 80px;
+    max-width: 80px;
+}
+
+.order-table th:nth-child(2), /* Description */
+.order-table td:nth-child(2) {
+    width: 180px !important;
+    min-width: 180px;
+}
+
+.order-table th:nth-child(3), /* Reason */
+.order-table td:nth-child(3) {
+    width: 180px !important;
+    min-width: 180px;
+}
+
+.order-table th:nth-child(4), /* Product Link */
+.order-table td:nth-child(4) {
+    width: 150px !important;
+    min-width: 150px;
+}
+
+.order-table th:nth-child(5), /* Organization */
+.order-table td:nth-child(5) {
+    width: 120px !important;
+    min-width: 120px;
+}
+
+.order-table th:nth-child(6), /* Cost per Item */
+.order-table td:nth-child(6) {
+    width: 100px !important; /* Much narrower for cost */
+    min-width: 100px;
+    max-width: 100px;
+}
+
+.order-table th:nth-child(7), /* Row Total */
+.order-table td:nth-child(7) {
+    width: 100px !important;
+    min-width: 100px;
+    max-width: 100px;
+    text-align: right;
+    padding-right: 12px !important;
+}
+
+.order-table th:nth-child(8), /* Actions */
+.order-table td:nth-child(8) {
+    width: 90px !important;
+    min-width: 90px;
+    max-width: 90px;
 }
 
 .order-table tbody tr:hover {
@@ -76,12 +134,20 @@
 .order-table textarea,
 .order-table select {
     width: 100%;
-    padding: 8px 12px;
+    padding: 6px 8px;
     border: 1px solid #d1d5db;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 13px;
     box-sizing: border-box;
     transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Even narrower inputs for quantity and cost */
+.order-table td:nth-child(1) input,
+.order-table td:nth-child(6) input {
+    padding: 6px;
+    text-align: center;
+    font-size: 12px;
 }
 
 .order-table input:focus,
@@ -89,35 +155,36 @@
 .order-table select:focus {
     outline: none;
     border-color: #4a6fa5;
-    box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+    box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.1);
 }
 
 .order-table textarea {
     resize: vertical;
-    min-height: 60px;
+    min-height: 50px;
     font-family: inherit;
-    line-height: 1.4;
+    line-height: 1.3;
+    font-size: 12px;
+    padding: 6px 8px;
 }
 
 .row-total {
     font-weight: 600;
     color: #1e40af;
-    min-width: 100px;
-    text-align: right;
-    padding-right: 20px !important;
+    font-size: 13px;
+    padding-right: 12px !important;
 }
 
 .delete-btn {
     background-color: #ef4444;
     color: white;
     border: none;
-    padding: 6px 12px;
+    padding: 5px 8px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 11px;
     transition: background-color 0.2s;
     width: 100%;
-    max-width: 80px;
+    max-width: 70px;
 }
 
 .delete-btn:hover {
@@ -136,24 +203,24 @@
 
 .total-label {
     text-align: right;
-    padding-right: 20px !important;
-    font-size: 16px;
+    padding-right: 12px !important;
+    font-size: 14px;
     color: #334155;
 }
 
 .grand-total {
-    font-size: 18px;
+    font-size: 15px;
     color: #1e40af;
     text-align: right;
-    padding-right: 20px !important;
+    padding-right: 12px !important;
 }
 
 .table-footer {
-    padding: 12px 20px;
+    padding: 10px 15px;
     background-color: #f8fafc;
     border-top: 1px solid #e2e8f0;
     color: #64748b;
-    font-size: 12px;
+    font-size: 11px;
 }
 
 /* Responsive adjustments */
@@ -164,13 +231,24 @@
     
     .table-header {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
         align-items: flex-start;
+        padding: 12px;
     }
     
     .add-row-btn {
         align-self: stretch;
         text-align: center;
+        padding: 6px;
+    }
+    
+    .order-table {
+        min-width: 600px;
+    }
+    
+    .order-table th,
+    .order-table td {
+        padding: 6px;
     }
 }
 
@@ -189,5 +267,23 @@
 .auto-resize {
     resize: none;
     overflow: hidden;
-    min-height: 60px;
+    min-height: 50px;
+}
+
+/* Compact number inputs */
+input[type="number"] {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+}
+
+/* Organization select styling */
+.organization-select {
+    font-size: 12px;
+    padding: 5px 6px;
+}
+
+/* Link input styling */
+.link-input {
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
 }
