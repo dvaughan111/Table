@@ -1,416 +1,258 @@
-.widget-container {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    padding: 15px;
-    background-color: #f9f9f9;
-    max-width: 850px;
-    margin: 0 auto;
+/* JOTFORM CONFIGURABLE LIST STYLING - FIELD ID: input_14 */
+/* Total form width: 850px */
+
+/* ========== MAIN CONTAINER ========== */
+.form-all {
+    max-width: 850px !important;
+    margin: 0 auto !important;
+    background-color: #f9f9f9 !important;
+    padding: 20px !important;
 }
 
-.order-table-container {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 12px rgba(96, 26, 155, 0.1);
-    overflow: hidden;
-    border: 1px solid #e0d4e9;
+/* ========== CONFIGURABLE LIST - FIELD ID: input_14 ========== */
+#input_14 {
+    width: 100% !important;
+    background: white !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 10px rgba(96, 26, 155, 0.1) !important;
+    border: 1px solid #e0d4e9 !important;
+    overflow: hidden !important;
+    padding: 15px !important;
 }
 
-.table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 20px;
-    background: linear-gradient(135deg, #601a9b 0%, #4a148c 100%);
-    color: white;
+/* Fix table layout */
+#input_14 table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    font-size: 12px !important;
 }
 
-.table-header h3 {
-    margin: 0;
-    font-weight: 600;
-    font-size: 18px;
-    letter-spacing: 0.5px;
+/* ========== COLUMN WIDTHS (ADJUST THESE) ========== */
+/* Total: 820px (leaves 30px for borders/padding) */
+
+/* Column 1: QTY (Very narrow) */
+#input_14 th:nth-child(1),
+#input_14 td:nth-child(1) {
+    width: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
+    text-align: center !important;
 }
 
-.add-row-btn {
-    background-color: #fc731c;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(252, 115, 28, 0.2);
+/* Column 2: Description (Wider) */
+#input_14 th:nth-child(2),
+#input_14 td:nth-child(2) {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
 }
 
-.add-row-btn:hover {
-    background-color: #e56418;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 6px rgba(252, 115, 28, 0.3);
+/* Column 3: Reason (Medium) */
+#input_14 th:nth-child(3),
+#input_14 td:nth-child(3) {
+    width: 150px !important;
+    min-width: 150px !important;
+    max-width: 150px !important;
 }
 
-.table-wrapper {
-    overflow-x: auto;
+/* Column 4: Product Link (Medium) */
+#input_14 th:nth-child(4),
+#input_14 td:nth-child(4) {
+    width: 160px !important;
+    min-width: 160px !important;
+    max-width: 160px !important;
 }
 
-.order-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
+/* Column 5: Organization (Narrow) */
+#input_14 th:nth-child(5),
+#input_14 td:nth-child(5) {
+    width: 120px !important;
+    min-width: 120px !important;
+    max-width: 120px !important;
 }
 
-.order-table th {
-    background-color: #f8f3fc;
-    padding: 12px 8px;
-    text-align: left;
-    font-weight: 600;
-    color: #601a9b;
-    border-bottom: 2px solid #e0d4e9;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+/* Column 6: Cost/Item (Very narrow) */
+#input_14 th:nth-child(6),
+#input_14 td:nth-child(6) {
+    width: 80px !important;
+    min-width: 80px !important;
+    max-width: 80px !important;
+    text-align: center !important;
 }
 
-.order-table td {
-    padding: 12px 8px;
-    border-bottom: 1px solid #f0e6f6;
-    vertical-align: top;
-    height: auto;
+/* ========== TABLE HEADERS (PURPLE) ========== */
+#input_14 th {
+    background-color: #601a9b !important;
+    background: linear-gradient(135deg, #601a9b 0%, #4a148c 100%) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    padding: 10px 8px !important;
+    border: none !important;
+    text-align: left !important;
 }
 
-/* NARROW COLUMN WIDTHS */
-.order-table th:nth-child(1),
-.order-table td:nth-child(1) {
-    width: 60px;
-    min-width: 60px;
-    max-width: 60px;
-    text-align: center;
+/* ========== TABLE CELLS ========== */
+#input_14 td {
+    padding: 8px !important;
+    border-bottom: 1px solid #f0e6f6 !important;
+    vertical-align: top !important;
+    color: #000000 !important;
+    background-color: white !important;
 }
 
-.order-table th:nth-child(2),
-.order-table td:nth-child(2) {
-    width: 180px;
-    min-width: 180px;
+/* ========== INPUT FIELDS ========== */
+#input_14 input[type="text"],
+#input_14 input[type="number"],
+#input_14 input[type="url"],
+#input_14 select,
+#input_14 textarea {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 6px 5px !important;
+    border: 1px solid #d8c8e4 !important;
+    border-radius: 3px !important;
+    font-size: 12px !important;
+    color: #000000 !important;
+    background-color: #fefcff !important;
+    font-family: inherit !important;
 }
 
-.order-table th:nth-child(3),
-.order-table td:nth-child(3) {
-    width: 150px;
-    min-width: 150px;
+/* Focus states */
+#input_14 input:focus,
+#input_14 select:focus,
+#input_14 textarea:focus {
+    outline: none !important;
+    border-color: #fc731c !important;
+    box-shadow: 0 0 0 2px rgba(252, 115, 28, 0.1) !important;
+    background-color: white !important;
 }
 
-.order-table th:nth-child(4),
-.order-table td:nth-child(4) {
-    width: 140px;
-    min-width: 140px;
+/* ========== SPECIFIC COLUMN STYLING ========== */
+
+/* QTY Column - Centered, narrow */
+#input_14 td:nth-child(1) input[type="text"],
+#input_14 td:nth-child(1) input[type="number"] {
+    padding: 6px 2px !important;
+    text-align: center !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    max-width: 40px !important;
+    margin: 0 auto !important;
+    display: block !important;
 }
 
-.order-table th:nth-child(5),
-.order-table td:nth-child(5) {
-    width: 120px;
-    min-width: 120px;
+/* Cost Column - Dollar sign */
+#input_14 td:nth-child(6) {
+    position: relative !important;
 }
 
-.order-table th:nth-child(6),
-.order-table td:nth-child(6) {
-    width: 80px;
-    min-width: 80px;
-    max-width: 80px;
-    text-align: center;
+#input_14 td:nth-child(6)::before {
+    content: "$" !important;
+    position: absolute !important;
+    left: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: #601a9b !important;
+    font-weight: 600 !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
+    font-size: 12px !important;
 }
 
-.order-table th:nth-child(7),
-.order-table td:nth-child(7) {
-    width: 90px;
-    min-width: 90px;
-    max-width: 90px;
-    text-align: right;
+#input_14 td:nth-child(6) input[type="text"],
+#input_14 td:nth-child(6) input[type="number"] {
+    padding-left: 22px !important;
+    text-align: right !important;
+    font-weight: 600 !important;
+    color: #601a9b !important;
 }
 
-.order-table th:nth-child(8),
-.order-table td:nth-child(8) {
-    width: 70px;
-    min-width: 70px;
-    max-width: 70px;
+/* ========== ADD/REMOVE BUTTONS ========== */
+/* Add Row button */
+#input_14 .jfAddNewRow {
+    background-color: #fc731c !important;
+    color: white !important;
+    border: none !important;
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+    margin: 10px 0 !important;
+    display: inline-block !important;
 }
 
-.order-table tbody tr:hover {
-    background-color: #fef7e6; /* Light yellow tint */
+#input_14 .jfAddNewRow:hover {
+    background-color: #e56418 !important;
 }
 
-.order-table input,
-.order-table textarea,
-.order-table select {
-    width: 100%;
-    padding: 9px 8px;
-    border: 1px solid #d8c8e4;
-    border-radius: 4px;
-    font-size: 13px;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
-    background-color: #fefcff;
-}
-
-.order-table input:focus,
-.order-table textarea:focus,
-.order-table select:focus {
-    outline: none;
-    border-color: #fc731c;
-    box-shadow: 0 0 0 3px rgba(252, 115, 28, 0.15);
-    background-color: white;
-}
-
-/* QUANTITY AND COST INPUTS - EXTRA NARROW */
-.order-table td:nth-child(1) input {
-    padding: 9px 4px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 600;
-    max-width: 50px;
-    margin: 0 auto;
-    display: block;
-    border-color: #b39ddb;
-    color: #601a9b;
-}
-
-.order-table td:nth-child(6) input {
-    padding: 9px 4px;
-    text-align: center;
-    font-size: 13px;
-    font-weight: 600;
-    max-width: 70px;
-    margin: 0 auto;
-    display: block;
-    border-color: #b39ddb;
-    color: #601a9b;
-}
-
-.order-table textarea {
-    resize: vertical;
-    min-height: 65px;
-    font-family: inherit;
-    line-height: 1.4;
-    font-size: 13px;
-}
-
-/* ROW TOTAL - USING YELLOW ACCENT */
-.row-total {
-    font-weight: 700;
-    color: #601a9b;
-    font-size: 14px;
-    padding-right: 8px !important;
-    background-color: rgba(244, 238, 56, 0.1);
-    border-radius: 4px;
+/* Remove Row button */
+#input_14 .jfRemoveRow {
+    background-color: #fc731c !important;
+    color: white !important;
+    border: none !important;
     padding: 4px 8px !important;
-    display: inline-block;
-    min-width: 80px;
-    text-align: center;
+    border-radius: 3px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    margin-top: 5px !important;
 }
 
-/* DELETE BUTTON - USING ORANGE */
-.delete-btn {
-    background-color: #fc731c;
-    color: white;
-    border: none;
-    padding: 7px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    width: 100%;
-    box-shadow: 0 1px 3px rgba(252, 115, 28, 0.2);
+#input_14 .jfRemoveRow:hover {
+    background-color: #e56418 !important;
 }
 
-.delete-btn:hover {
-    background-color: #e56418;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(252, 115, 28, 0.3);
+/* ========== GRAND TOTAL FOOTER ========== */
+/* Target the calculations or summary area */
+.form-sheet-bottom,
+.form-calculation-container {
+    background: linear-gradient(to right, #601a9b, #4a148c) !important;
+    color: white !important;
+    font-weight: 700 !important;
+    padding: 12px 15px !important;
+    border-radius: 6px !important;
+    margin-top: 20px !important;
 }
 
-.delete-btn:disabled {
-    background-color: #c4b1d6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+.form-sheet-bottom .form-sub-label,
+.form-calculation-container .form-sub-label {
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
 }
 
-/* GRAND TOTAL ROW - PURPLE BACKGROUND */
-.total-row {
-    background: linear-gradient(to right, #601a9b, #4a148c);
-    color: white;
-    font-weight: 600;
+.form-sheet-bottom .form-currency,
+.form-calculation-container .form-currency {
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
 }
 
-.total-label {
-    text-align: right;
-    padding-right: 8px !important;
-    font-size: 15px;
-    color: white;
-    font-weight: 600;
-}
-
-.grand-total {
-    font-size: 16px;
-    color: #f4ee38; /* YELLOW TEXT */
-    font-weight: 700;
-    text-align: right;
-    padding-right: 8px !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.table-footer {
-    padding: 12px 20px;
-    background-color: #fef7e6; /* Light yellow */
-    border-top: 1px solid #f4ee38;
-    color: #7b5fa1;
-    font-size: 12px;
-    font-style: italic;
-}
-
-/* COLORFUL BORDERS AND ACCENTS */
-.order-table {
-    border: 1px solid #e0d4e9;
-}
-
-.order-table thead {
-    border-bottom: 2px solid #fc731c;
-}
-
-/* SELECT DROPDOWN STYLING */
-.organization-select {
-    font-size: 13px;
-    padding: 9px 8px;
-    background-color: #fefcff;
-    border: 1px solid #d8c8e4;
-    color: #601a9b;
-    cursor: pointer;
-}
-
-.organization-select option {
-    background-color: white;
-    color: #333;
-}
-
-.organization-select:focus {
-    border-color: #fc731c;
-    background-color: white;
-}
-
-/* LINK INPUT STYLING */
-.link-input {
-    font-size: 12px;
-    color: #4a148c;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.link-input:focus {
-    color: #601a9b;
-}
-
-/* QUANTITY AND COST INPUT SPECIAL STYLING */
-.order-table td:nth-child(1) input:focus,
-.order-table td:nth-child(6) input:focus {
-    border-color: #fc731c;
-    background-color: #fff9f5;
-}
-
-/* INPUT VALIDATION WITH BRAND COLORS */
-.order-table input:invalid,
-.order-table textarea:invalid {
-    border-color: #ff6b6b;
-    background-color: #fff5f5;
-}
-
-.order-table input:valid,
-.order-table textarea:valid {
-    border-color: #4caf50;
-    background-color: #f8fff8;
-}
-
-/* RESPONSIVE ADJUSTMENTS */
-@media (max-width: 900px) {
-    .widget-container {
-        padding: 12px;
-        max-width: 100%;
+/* ========== RESPONSIVE ========== */
+@media (max-width: 850px) {
+    .form-all {
+        padding: 10px !important;
     }
     
-    .table-header {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
-        padding: 15px;
+    #input_14 {
+        padding: 10px !important;
     }
     
-    .add-row-btn {
-        align-self: stretch;
-        text-align: center;
-        padding: 10px;
+    #input_14 th,
+    #input_14 td {
+        padding: 6px 4px !important;
+        font-size: 11px !important;
     }
     
-    .order-table th,
-    .order-table td {
-        padding: 10px 6px;
+    #input_14 input,
+    #input_14 select,
+    #input_14 textarea {
+        font-size: 11px !important;
+        padding: 5px 4px !important;
     }
-}
-
-/* SCROLLBAR STYLING */
-.table-wrapper::-webkit-scrollbar {
-    height: 8px;
-}
-
-.table-wrapper::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-}
-
-.table-wrapper::-webkit-scrollbar-thumb {
-    background: #c4b1d6;
-    border-radius: 4px;
-}
-
-.table-wrapper::-webkit-scrollbar-thumb:hover {
-    background: #a48bc0;
-}
-
-/* AUTO-RESIZE TEXTAREA */
-.auto-resize {
-    resize: vertical;
-    overflow: hidden;
-    min-height: 65px;
-}
-
-/* PLACEHOLDER STYLING */
-::placeholder {
-    color: #a48bc0;
-    opacity: 0.7;
-}
-
-/* FOCUS VISIBLE FOR ACCESSIBILITY */
-.order-table input:focus-visible,
-.order-table textarea:focus-visible,
-.order-table select:focus-visible {
-    outline: 2px solid #fc731c;
-    outline-offset: 2px;
-}
-
-/* NUMBER INPUT SPINNER STYLING */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    opacity: 0.5;
-}
-
-input[type="number"]::-webkit-inner-spin-button:hover,
-input[type="number"]::-webkit-outer-spin-button:hover {
-    opacity: 1;
-}
-
-/* SPECIAL STYLING FOR REQUIRED FIELDS */
-.order-table td:nth-child(1) input::placeholder,
-.order-table td:nth-child(6) input::placeholder {
-    color: #c4b1d6;
-    font-weight: normal;
 }
