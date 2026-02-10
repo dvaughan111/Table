@@ -8,13 +8,13 @@
     <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
 
     <style>
-        /* CLEAN, COMPACT DESIGN */
+        /* DESIGN STYLES */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
             margin: 0;
             padding: 0;
-            background-color: transparent !important; /* Required for Jotform */
+            background-color: transparent !important;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
@@ -32,7 +32,6 @@
             border: 1px solid #e0d4e9;
         }
         
-        /* TABLE HEADER */
         .table-header {
             padding: 12px 15px;
             background: linear-gradient(135deg, #601a9b 0%, #4a148c 100%);
@@ -46,7 +45,6 @@
             text-align: center;
         }
         
-        /* TABLE */
         .table-wrapper { overflow-x: auto; }
         
         .order-table {
@@ -75,13 +73,13 @@
         }
         
         /* COLUMN WIDTHS */
-        .order-table th:nth-child(1) { width: 45px; text-align: center; } /* Qty */
-        .order-table th:nth-child(2) { width: 110px; } /* Desc */
-        .order-table th:nth-child(3) { width: 95px; }  /* Reason */
-        .order-table th:nth-child(4) { width: 125px; } /* Link */
-        .order-table th:nth-child(5) { width: 100px; } /* Org */
-        .order-table th:nth-child(6) { width: 75px; text-align: center; } /* Cost */
-        .order-table th:nth-child(7) { width: 135px; } /* Total */
+        .order-table th:nth-child(1) { width: 45px; text-align: center; } 
+        .order-table th:nth-child(2) { width: 110px; } 
+        .order-table th:nth-child(3) { width: 95px; }  
+        .order-table th:nth-child(4) { width: 125px; } 
+        .order-table th:nth-child(5) { width: 100px; } 
+        .order-table th:nth-child(6) { width: 75px; text-align: center; } 
+        .order-table th:nth-child(7) { width: 135px; } 
         
         /* INPUTS */
         .order-table input, .order-table textarea, .order-table select {
@@ -91,9 +89,9 @@
             border-radius: 3px;
             font-size: 12px;
             background-color: #fefcff;
+            font-family: inherit;
         }
 
-        /* COST INPUT */
         .cost-input-wrapper { position: relative; width: 100%; }
         .cost-input-wrapper::before {
             content: "$";
@@ -107,7 +105,7 @@
         }
         .cost-input { padding-left: 16px !important; text-align: right; }
 
-        /* FOOTER / TOTALS */
+        /* FOOTER */
         .total-row {
             background: linear-gradient(to right, #601a9b, #4a148c);
             color: white;
@@ -140,15 +138,10 @@
             padding-right: 15px;
         }
 
-        /* PDF / PRINT OPTIMIZATION */
+        /* PRINT OPTIMIZATION (For the PDF engine) */
         @media print {
             .add-row-btn { display: none !important; }
-            input, textarea, select {
-                border: none !important;
-                background: transparent !important;
-                appearance: none;
-                -webkit-appearance: none;
-            }
+            .order-table { border: 1px solid #ccc; }
         }
     </style>
 </head>
@@ -189,54 +182,51 @@
     </div>
 
     <script>
+        // --- 1. JOTFORM DATA SYNC ---
         function sendDataToJotform() {
-    const tableElement = document.getElementById('orderTable');
-    // We use a clone to ensure we aren't sending "live" UI buttons to the PDF
-    const tableClone = tableElement.cloneNode(true);
-    const btn = tableClone.querySelector('#addRowBtn');
-    if(btn) btn.remove();
-
-    // 1. Convert inputs to static text for the PDF
-    tableClone.querySelectorAll('input, textarea, select').forEach(el => {
-        const val = el.value || "";
-        const span = document.createElement('span');
-        span.textContent = (el.tagName === 'SELECT') ? el.options[el.selectedIndex].text : val;
-        el.parentNode.replaceChild(span, el);
-    });
-
-    const finalHTML = tableClone.outerHTML;
-
-    // 2. Send data to the widget itself
-    JOTFORM.sendData({ value: finalHTML });
-
-    // 3. THE MAGIC: Push to the hidden Jotform field (the "Proxy")
-    // This allows the PDF Editor to see a "Standard Field" instead of a widget
-    window.parent.postMessage({
-        type: 'setValues',
-        value: {
-            'tableProxy': finalHTML // Replace 'tableProxy' with your field's Unique Name
-        }
-    }, '*');
-}
-
-            // Hide the "Add Row" button in the PDF data
+            // Clone the table for the PDF (to keep it clean)
+            const tableClone = document.getElementById('orderTable').cloneNode(true);
+            
+            // Remove the Add Row button from the PDF clone
             const btn = tableClone.querySelector('#addRowBtn');
-            if(btn) btn.style.display = 'none';
+            if(btn) btn.remove();
 
-            // Send the cleaned HTML string to Jotform
-            JOTFORM.sendData({
-                value: tableClone.outerHTML
+            // Convert interactive inputs into static text for the PDF
+            tableClone.querySelectorAll('input, textarea, select').forEach(el => {
+                const val = el.value || "";
+                let displayVal = val;
+                if (el.tagName === 'SELECT') {
+                    displayVal = el.options[el.selectedIndex].text;
+                }
+                const span = document.createElement('span');
+                span.textContent = displayVal;
+                el.parentNode.replaceChild(span, el);
             });
+
+            const finalHTML = tableClone.outerHTML;
+
+            // Send to Widget Data (for Submissions table)
+            JOTFORM.sendData({ value: finalHTML });
+
+            // Push to the hidden "tableProxy" field (for PDF Editor)
+            window.parent.postMessage({
+                action: 'setValues',
+                value: {
+                    'tableProxy': finalHTML 
+                }
+            }, '*');
         }
 
-        // --- TABLE LOGIC ---
+        // --- 2. TABLE FUNCTIONALITY ---
         document.addEventListener('DOMContentLoaded', function() {
             initializeTable();
-            document.getElementById('addRowBtn').addEventListener('click', addRow);
+            document.getElementById('addRowBtn').addEventListener('click', () => {
+                addRow();
+                sendDataToJotform();
+            });
             
-            // Start the Jotform Widget Subscription
             JOTFORM.subscribe("ready", function() {
-                sendDataToJotform(); // Initial sync
+                sendDataToJotform(); 
             });
         });
 
@@ -254,8 +244,8 @@
             row.id = `row-${rowId}`;
             row.innerHTML = `
                 <td><input type="number" min="1" value="1" class="quantity-input" data-row="${rowId}"></td>
-                <td><textarea class="description-input" placeholder="Item description" data-row="${rowId}" rows="2"></textarea></td>
-                <td><textarea class="reason-input" placeholder="Reason" data-row="${rowId}" rows="2"></textarea></td>
+                <td><textarea class="description-input" placeholder="Item..." data-row="${rowId}" rows="2"></textarea></td>
+                <td><textarea class="reason-input" placeholder="Reason..." data-row="${rowId}" rows="2"></textarea></td>
                 <td><input type="url" class="link-input" placeholder="https://" data-row="${rowId}"></td>
                 <td>
                     <select class="organization-select" data-row="${rowId}">
@@ -269,20 +259,22 @@
             `;
             tableBody.appendChild(row);
 
-            // Add change listeners to trigger sync
             row.querySelectorAll('input, textarea, select').forEach(input => {
                 input.addEventListener('input', () => {
                     updateRowTotal(rowId);
                     updateGrandTotal();
-                    sendDataToJotform(); // Push to Jotform on every keystroke
+                    sendDataToJotform(); 
                 });
             });
         }
 
         function updateRowTotal(rowId) {
-            const qty = parseFloat(document.querySelector(`.quantity-input[data-row="${rowId}"]`).value) || 0;
-            const cost = parseFloat(document.querySelector(`.cost-input[data-row="${rowId}"]`).value) || 0;
-            document.getElementById(`row-total-${rowId}`).textContent = formatCurrency(qty * cost);
+            const q = document.querySelector(`.quantity-input[data-row="${rowId}"]`);
+            const c = document.querySelector(`.cost-input[data-row="${rowId}"]`);
+            if(q && c) {
+                const total = (parseFloat(q.value) || 0) * (parseFloat(c.value) || 0);
+                document.getElementById(`row-total-${rowId}`).textContent = formatCurrency(total);
+            }
         }
 
         function updateGrandTotal() {
