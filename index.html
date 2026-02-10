@@ -47,12 +47,12 @@
         
         /* Hidden inputs for JotForm */
         .jotform-hidden {
-            display: none !important;
-            height: 0 !important;
-            width: 0 !important;
-            opacity: 0 !important;
             position: absolute !important;
             left: -9999px !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            width: 0 !important;
+            pointer-events: none !important;
         }
     </style>
 </head>
@@ -97,33 +97,56 @@
         </div>
     </div>
 
-    <!-- HIDDEN INPUTS FOR JOTFORM SUBMISSION -->
-    <input type="hidden" id="orderSummaryText" name="orderSummaryText" class="jotform-hidden">
-    <input type="hidden" id="orderSummaryHTML" name="orderSummaryHTML" class="jotform-hidden">
-    <input type="hidden" id="orderGrandTotal" name="orderGrandTotal" class="jotform-hidden">
+    <!-- SINGLE HIDDEN TEXTAREA FOR JOTFORM -->
+    <textarea id="jotformOrderData" name="jotformOrderData" class="jotform-hidden"></textarea>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeTable();
+        // JotForm Widget Integration - CRITICAL FOR SUBMISSION
+        if (typeof JFCustomWidget !== 'undefined') {
+            // Tell JotForm the widget is ready
+            JFCustomWidget.subscribe('ready', function() {
+                console.log('Widget ready');
+                initializeTable();
+            });
+            
+            // Handle form submission
+            JFCustomWidget.subscribe('submit', function() {
+                console.log('Form submitting - saving data');
+                saveDataToJotForm();
+                return true; // CRITICAL: Allow form to submit
+            });
+        } else {
+            // Fallback for testing outside JotForm
+            document.addEventListener('DOMContentLoaded', initializeTable);
+        }
+
+        function initializeTable() {
+            console.log('Initializing table');
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+            
             document.getElementById('addRowBtn').addEventListener('click', addRow);
+            
+            // Create 3 initial rows instead of 5 for cleaner view
+            for (let i = 0; i < 3; i++) {
+                addRow();
+            }
+            
+            updateGrandTotal();
+            saveDataToJotForm(); // Initial save
             
             setTimeout(() => {
                 document.querySelectorAll('textarea').forEach(textarea => {
                     autoResizeTextarea(textarea);
                 });
             }, 100);
-        });
-
-        function initializeTable() {
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = '';
             
-            for (let i = 0; i < 5; i++) {
-                addRow();
+            // Notify JotForm widget is ready
+            if (typeof JFCustomWidget !== 'undefined') {
+                setTimeout(() => {
+                    JFCustomWidget.sendData({ ready: true });
+                }, 500);
             }
-            
-            updateGrandTotal();
-            saveData();
         }
 
         function addRow() {
@@ -176,13 +199,14 @@
             
             tableBody.appendChild(row);
             
+            // Setup event listeners
             const textareas = row.querySelectorAll('textarea');
             textareas.forEach(textarea => {
                 textarea.addEventListener('input', function() {
                     autoResizeTextarea(this);
                     updateRowTotal(rowId);
                     updateGrandTotal();
-                    saveData();
+                    saveDataToJotForm();
                 });
                 setTimeout(() => autoResizeTextarea(textarea), 10);
             });
@@ -192,18 +216,18 @@
                 input.addEventListener('input', function() {
                     updateRowTotal(rowId);
                     updateGrandTotal();
-                    saveData();
+                    saveDataToJotForm();
                 });
                 input.addEventListener('change', function() {
                     updateRowTotal(rowId);
                     updateGrandTotal();
-                    saveData();
+                    saveDataToJotForm();
                 });
             });
             
             updateRowTotal(rowId);
             updateGrandTotal();
-            saveData();
+            saveDataToJotForm();
         }
 
         function updateRowTotal(rowId) {
@@ -217,7 +241,7 @@
             const costPerItem = parseFloat(costInput.value) || 0;
             const rowTotal = quantity * costPerItem;
             
-            rowTotalElement.textContent = formatCurrency(rowTotal);
+            rowTotalElement.textContent = '$' + rowTotal.toFixed(2);
         }
 
         function updateGrandTotal() {
@@ -230,11 +254,7 @@
                 grandTotal += value;
             });
             
-            document.getElementById('grandTotal').textContent = formatCurrency(grandTotal);
-        }
-
-        function formatCurrency(amount) {
-            return '$' + amount.toFixed(2);
+            document.getElementById('grandTotal').textContent = '$' + grandTotal.toFixed(2);
         }
 
         window.autoResizeTextarea = function(textarea) {
@@ -253,168 +273,138 @@
                     otherCheckbox.checked = false;
                 }
             }
-            saveData();
+            saveDataToJotForm();
         };
 
-        // SAVE DATA TO HIDDEN INPUTS
-        function saveData() {
-            const rows = document.querySelectorAll('#tableBody tr');
-            const data = [];
-            let grandTotal = 0;
-            
-            rows.forEach((row, index) => {
-                const rowId = row.id.replace('row-', '');
-                const quantity = row.querySelector('.quantity-input')?.value || '1';
-                const description = row.querySelector('.description-input')?.value || '';
-                const reason = row.querySelector('.reason-input')?.value || '';
-                const link = row.querySelector('.link-input')?.value || '';
-                const orgSelect = row.querySelector('.organization-select');
-                const org = orgSelect ? orgSelect.options[orgSelect.selectedIndex].text : 'Spark HH';
-                const cost = row.querySelector('.cost-input')?.value || '0.00';
-                const rowTotal = document.getElementById(`row-total-${rowId}`)?.textContent || '$0.00';
-                const approveChecked = row.querySelector('.status-approve')?.checked || false;
-                const pendChecked = row.querySelector('.status-pend')?.checked || false;
-                const status = approveChecked ? 'Approved' : (pendChecked ? 'Pending' : '');
+        // MAIN FUNCTION: Save data to JotForm
+        function saveDataToJotForm() {
+            try {
+                const rows = document.querySelectorAll('#tableBody tr');
+                const data = [];
+                let grandTotal = 0;
                 
-                const quantityNum = parseFloat(quantity) || 0;
-                const costNum = parseFloat(cost) || 0;
-                const rowTotalNum = quantityNum * costNum;
-                grandTotal += rowTotalNum;
-                
-                data.push({
-                    row: index + 1,
-                    quantity: quantity,
-                    description: description,
-                    reason: reason,
-                    link: link,
-                    organization: org,
-                    cost: cost,
-                    rowTotal: rowTotal,
-                    status: status
-                });
-            });
-            
-            // Create text summary
-            let textSummary = "ORDER FORM\n";
-            textSummary += "=".repeat(50) + "\n\n";
-            
-            data.forEach(item => {
-                textSummary += `ITEM ${item.row}:\n`;
-                textSummary += `  Quantity: ${item.quantity}\n`;
-                textSummary += `  Description: ${item.description}\n`;
-                textSummary += `  Reason: ${item.reason}\n`;
-                textSummary += `  Link: ${item.link}\n`;
-                textSummary += `  Organization: ${item.organization}\n`;
-                textSummary += `  Cost per Item: $${parseFloat(item.cost).toFixed(2)}\n`;
-                textSummary += `  Row Total: ${item.rowTotal}\n`;
-                if (item.status) {
-                    textSummary += `  Status: ${item.status}\n`;
-                }
-                textSummary += "\n";
-            });
-            
-            textSummary += "=".repeat(50) + "\n";
-            textSummary += `GRAND TOTAL: $${grandTotal.toFixed(2)}\n`;
-            
-            // Create HTML for PDF (with your exact styling)
-            let html = `
-            <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 750px; margin: 0 auto; padding: 10px 5px; background-color: #f9f9f9;">
-                <div style="background: white; border-radius: 6px; box-shadow: 0 2px 10px rgba(96, 26, 155, 0.1); border: 1px solid #e0d4e9; overflow: hidden;">
-                    <div style="padding: 12px 15px; background: linear-gradient(135deg, #601a9b 0%, #4a148c 100%); color: white;">
-                        <div style="margin: 0; font-weight: 600; font-size: 16px; text-align: center;">📋 Order Form</div>
-                    </div>
+                rows.forEach((row, index) => {
+                    const rowId = row.id.replace('row-', '');
+                    const quantity = row.querySelector('.quantity-input')?.value || '1';
+                    const description = row.querySelector('.description-input')?.value || '';
+                    const reason = row.querySelector('.reason-input')?.value || '';
+                    const link = row.querySelector('.link-input')?.value || '';
+                    const orgSelect = row.querySelector('.organization-select');
+                    const org = orgSelect ? orgSelect.options[orgSelect.selectedIndex].text : 'Spark HH';
+                    const cost = row.querySelector('.cost-input')?.value || '0.00';
+                    const rowTotal = document.getElementById(`row-total-${rowId}`)?.textContent || '$0.00';
+                    const approveChecked = row.querySelector('.status-approve')?.checked || false;
+                    const pendChecked = row.querySelector('.status-pend')?.checked || false;
+                    const status = approveChecked ? '✓ Approved' : (pendChecked ? '⚠ Pending' : '');
                     
-                    <div style="overflow-x: auto;">
-                        <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px;">
-                            <thead>
-                                <tr style="background-color: #f8f3fc;">
-                                    <th style="padding: 8px 4px; text-align: left; font-weight: 600; color: #601a9b; border-bottom: 2px solid #e0d4e9; font-size: 11px; text-transform: uppercase; width: 45px; min-width: 45px; max-width: 45px; text-align: center;">QTY</th>
-                                    <th style="padding: 8px 4px; text-align: left; font-weight: 600; color: #601a9b; border-bottom: 2px solid #e0d4e9; font-size: 11px; text-transform: uppercase; width: 110px; min-width: 110px; max-width: 110px;">DESC</th>
-                                    <th style="padding: 8px 4px; text-align: left; font-weight: 600; color: #601a9b; border-bottom: 2px solid #e0d4e9; font-size: 11px; text-transform: uppercase; width: 95px; min-width: 95px; max-width: 95px;">REASON</th>
-                                    <th style="padding: 8px 4px; text-align: left; font-weight: 600; color: #601a9b; border-bottom: 2px solid #e0d4e9; font-size: 11px; text-transform: uppercase; width: 125px; min-width: 125px; max-width: 125px;">LINK</th>
-                                    <th style="padding: 8px 4px; text-align: left; font-weight: 600; color: #601a9b; border-bottom: 2px solid #e0d4e9; font-size: 11px; text-transform: uppercase; width: 100px; min-width: 100px; max-width: 100px;">ORG</th>
-                                    <th style="padding: 8px 4px; text-align: left; font-weight: 600; color: #601a9b; border-bottom: 2px solid #e0d4e9; font-size: 11px; text-transform: uppercase; width: 75px; min-width: 75px; max-width: 75px; text-align: center;">COST</th>
-                                    <th style="padding: 8px 4px; text-align: left; font-weight: 600; color: #601a9b; border-bottom: 2px solid #e0d4e9; font-size: 11px; text-transform: uppercase; width: 135px; min-width: 135px; max-width: 135px;">TOTAL</th>
-                                </tr>
-                            </thead>
-                            <tbody>`;
-            
-            data.forEach(item => {
-                html += `
-                                <tr>
-                                    <td style="padding: 8px 4px; border-bottom: 1px solid #f0e6f6; text-align: center; vertical-align: top; color: #000000;">
-                                        <div style="padding: 6px 3px; text-align: center; font-size: 12px; font-weight: 600;">${item.quantity}</div>
-                                    </td>
-                                    <td style="padding: 8px 4px; border-bottom: 1px solid #f0e6f6; vertical-align: top; color: #000000;">
-                                        <div style="padding: 6px 4px; font-size: 12px; color: #000000; line-height: 1.3; min-height: 45px;">${item.description}</div>
-                                    </td>
-                                    <td style="padding: 8px 4px; border-bottom: 1px solid #f0e6f6; vertical-align: top; color: #000000;">
-                                        <div style="padding: 6px 4px; font-size: 12px; color: #000000; line-height: 1.3; min-height: 45px;">${item.reason}</div>
-                                    </td>
-                                    <td style="padding: 8px 4px; border-bottom: 1px solid #f0e6f6; vertical-align: top; color: #000000;">
-                                        <div style="padding: 6px 4px; font-size: 12px; color: #000000; line-height: 1.3; word-break: break-all;">${item.link}</div>
-                                    </td>
-                                    <td style="padding: 8px 4px; border-bottom: 1px solid #f0e6f6; vertical-align: top; color: #000000;">
-                                        <div style="padding: 6px 4px; font-size: 12px; color: #000000; line-height: 1.3;">${item.organization}</div>
-                                    </td>
-                                    <td style="padding: 8px 4px; border-bottom: 1px solid #f0e6f6; vertical-align: top; color: #000000; text-align: center;">
-                                        <div style="position: relative;">
-                                            <div style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #601a9b; font-weight: 600; font-size: 11px;">$</div>
-                                            <div style="padding: 6px 5px 6px 16px; text-align: right; font-size: 12px; font-weight: 600; color: #601a9b;">${parseFloat(item.cost).toFixed(2)}</div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 8px 4px; border-bottom: 1px solid #f0e6f6; vertical-align: top; color: #000000;">
-                                        <div style="display: flex; align-items: center; gap: 2px;">
-                                            <div style="font-weight: 600; color: #000000; font-size: 12px; padding: 6px 8px; background-color: #fefcff; border: 1px solid #d8c8e4; border-radius: 3px; min-width: 65px; text-align: center;">${item.rowTotal}</div>
-                                            ${item.status ? `
-                                            <div style="display: flex; flex-direction: column; gap: 1px;">
-                                                <div style="display: flex; align-items: center; gap: 2px; font-size: 9px; color: #000000;">
-                                                    <div style="width: 10px; height: 10px; background-color: ${item.status === 'Approved' ? '#fc731c' : '#ddd'}; border-radius: 2px;"></div>
-                                                    <div>${item.status}</div>
-                                                </div>
-                                            </div>
-                                            ` : ''}
-                                        </div>
-                                    </td>
-                                </tr>`;
-            });
-            
-            html += `
-                            </tbody>
-                            <tfoot>
-                                <tr style="background: linear-gradient(to right, #601a9b, #4a148c); color: white; font-weight: 700; height: 60px; position: relative;">
-                                    <td colspan="6" style="padding: 8px 4px;">
-                                        <div style="position: absolute; left: 15px; top: 10px; display: flex; flex-direction: column; gap: 5px;">
-                                            <div style="font-size: 13px; color: white; font-weight: 700;">🎯 GRAND TOTAL:</div>
-                                        </div>
-                                    </td>
-                                    <td style="padding: 8px 4px; text-align: right; font-size: 14px; color: white; font-weight: 700;">
-                                        $${grandTotal.toFixed(2)}
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </div>`;
-            
-            // Save to hidden inputs
-            document.getElementById('orderSummaryText').value = textSummary;
-            document.getElementById('orderSummaryHTML').value = html;
-            document.getElementById('orderGrandTotal').value = '$' + grandTotal.toFixed(2);
-            
-            // Try to send to JotForm API if available
-            if (typeof JFCustomWidget !== 'undefined') {
-                JFCustomWidget.sendData({
-                    summary: textSummary,
-                    html: html,
-                    grandTotal: '$' + grandTotal.toFixed(2)
+                    const quantityNum = parseFloat(quantity) || 0;
+                    const costNum = parseFloat(cost) || 0;
+                    const rowTotalNum = quantityNum * costNum;
+                    grandTotal += rowTotalNum;
+                    
+                    data.push({
+                        row: index + 1,
+                        quantity: quantity,
+                        description: description,
+                        reason: reason,
+                        link: link,
+                        organization: org,
+                        cost: cost,
+                        rowTotal: rowTotal,
+                        status: status
+                    });
                 });
+                
+                // Create clean text summary for submissions
+                let textSummary = "ORDER FORM SUMMARY\n";
+                textSummary += "=".repeat(40) + "\n\n";
+                
+                data.forEach(item => {
+                    textSummary += `Item ${item.row}:\n`;
+                    if (item.description) textSummary += `  • Description: ${item.description}\n`;
+                    if (item.reason) textSummary += `  • Reason: ${item.reason}\n`;
+                    if (item.link) textSummary += `  • Link: ${item.link}\n`;
+                    textSummary += `  • Qty: ${item.quantity} | Org: ${item.organization}\n`;
+                    textSummary += `  • Cost: $${parseFloat(item.cost).toFixed(2)} each\n`;
+                    textSummary += `  • Total: ${item.rowTotal}\n`;
+                    if (item.status) textSummary += `  • Status: ${item.status}\n`;
+                    textSummary += "\n";
+                });
+                
+                textSummary += "=".repeat(40) + "\n";
+                textSummary += `GRAND TOTAL: $${grandTotal.toFixed(2)}\n`;
+                
+                // Create simple HTML table for PDF (no fancy styles)
+                let simpleHTML = `
+                <div style="font-family: Arial, sans-serif; font-size: 12px; margin: 10px 0;">
+                    <h3 style="color: #601a9b; margin-bottom: 10px;">Order Form</h3>
+                    <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+                        <thead>
+                            <tr style="background-color: #f0f0f0;">
+                                <th>Qty</th>
+                                <th>Description</th>
+                                <th>Reason</th>
+                                <th>Organization</th>
+                                <th>Cost</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                
+                data.forEach(item => {
+                    simpleHTML += `
+                            <tr>
+                                <td>${item.quantity}</td>
+                                <td>${item.description || ''}</td>
+                                <td>${item.reason || ''}</td>
+                                <td>${item.organization}</td>
+                                <td>$${parseFloat(item.cost).toFixed(2)}</td>
+                                <td>${item.rowTotal}</td>
+                                <td>${item.status || ''}</td>
+                            </tr>`;
+                });
+                
+                simpleHTML += `
+                        </tbody>
+                        <tfoot>
+                            <tr style="background-color: #e0e0e0; font-weight: bold;">
+                                <td colspan="5" style="text-align: right;">Grand Total:</td>
+                                <td colspan="2">$${grandTotal.toFixed(2)}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>`;
+                
+                // Save to hidden textarea
+                const textarea = document.getElementById('jotformOrderData');
+                if (textarea) {
+                    textarea.value = simpleHTML;
+                }
+                
+                // Send to JotForm widget API
+                if (typeof JFCustomWidget !== 'undefined') {
+                    JFCustomWidget.sendData({
+                        orderData: JSON.stringify(data),
+                        summary: textSummary,
+                        html: simpleHTML,
+                        grandTotal: '$' + grandTotal.toFixed(2),
+                        status: 'ready'
+                    });
+                }
+                
+                console.log('Data saved:', data.length, 'rows');
+                
+            } catch (error) {
+                console.error('Error saving data:', error);
             }
         }
 
-        // Auto-save every 3 seconds
-        setInterval(saveData, 3000);
+        // Auto-save every 2 seconds
+        setInterval(saveDataToJotForm, 2000);
+        
+        // Also save on page unload
+        window.addEventListener('beforeunload', saveDataToJotForm);
     </script>
 </body>
 </html>
