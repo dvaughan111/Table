@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Form</title>
+    <title>Order Form Widget</title>
     <style>
-        /* [Keep all your existing CSS styles here - they remain the same] */
-        /* ... Your existing CSS ... */
+        /* [Your existing CSS styles remain exactly the same] */
+        /* ... Your original CSS code ... */
     </style>
 </head>
 <body>
@@ -50,30 +50,65 @@
         </div>
     </div>
 
-    <!-- HIDDEN FIELD TO STORE TABLE DATA FOR PDF GENERATION -->
-    <div style="display: none;">
-        <textarea id="tableDataStorage" name="tableDataStorage"></textarea>
-    </div>
+    <!-- CRITICAL: Hidden field that JotForm will capture -->
+    <input type="hidden" id="orderFormData" name="orderFormData" value="">
 
     <script>
-        // JOTFORM WIDGET INITIALIZATION
-        if (typeof JFCustomWidget !== 'undefined') {
-            // Widget is loaded in form builder or form view
-            JFCustomWidget.subscribe('ready', function() {
-                initializeWidget();
-            });
-        } else {
-            // Fallback for direct HTML preview
-            document.addEventListener('DOMContentLoaded', function() {
-                initializeWidget();
-            });
+        // ============================================
+        // JOTFORM WIDGET INTEGRATION
+        // ============================================
+        
+        // Function to send data to JotForm parent
+        function sendToJotForm(data) {
+            try {
+                // Method 1: Use JotForm Widget API if available
+                if (typeof JFCustomWidget !== 'undefined') {
+                    JFCustomWidget.sendData(data);
+                }
+                
+                // Method 2: Direct parent communication for form submission
+                if (window.parent && window.parent.postMessage) {
+                    window.parent.postMessage({
+                        type: 'JOTFORM_WIDGET_DATA',
+                        widgetId: 'orderFormWidget',
+                        data: data
+                    }, '*');
+                }
+                
+                // Method 3: Store in hidden field for form submission
+                const hiddenField = document.getElementById('orderFormData');
+                if (hiddenField) {
+                    hiddenField.value = JSON.stringify(data);
+                }
+                
+            } catch (e) {
+                console.error('Error sending to JotForm:', e);
+            }
         }
 
-        function initializeWidget() {
+        // Initialize when JotForm is ready or on DOM load
+        if (typeof JFCustomWidget !== 'undefined') {
+            JFCustomWidget.subscribe('ready', initWidget);
+            JFCustomWidget.subscribe('submit', onFormSubmit);
+        } else {
+            document.addEventListener('DOMContentLoaded', initWidget);
+        }
+
+        // ============================================
+        // WIDGET FUNCTIONALITY
+        // ============================================
+
+        let widgetInitialized = false;
+        let tableData = [];
+
+        function initWidget() {
+            if (widgetInitialized) return;
+            widgetInitialized = true;
+            
             initializeTable();
             document.getElementById('addRowBtn').addEventListener('click', addRow);
             
-            // Initialize auto-resize for textareas
+            // Auto-resize textareas
             setTimeout(() => {
                 document.querySelectorAll('textarea').forEach(textarea => {
                     autoResizeTextarea(textarea);
@@ -85,39 +120,21 @@
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = '';
             
-            // Try to load existing data from JotForm
-            let existingData = [];
-            try {
-                // Check if we're in JotForm context
-                if (window.parent && window.parent.JFCustomWidget) {
-                    const widgetData = window.parent.JFCustomWidget.getWidgetData();
-                    if (widgetData && widgetData.tableData) {
-                        existingData = JSON.parse(widgetData.tableData);
-                    }
-                }
-            } catch (e) {
-                console.log('No existing data found');
-            }
+            // Clear existing data
+            tableData = [];
             
-            if (existingData.length > 0) {
-                // Load existing rows
-                existingData.forEach(rowData => {
-                    addRow(rowData);
-                });
-            } else {
-                // Create 5 initial rows
-                for (let i = 0; i < 5; i++) {
-                    addRow();
-                }
+            // Create 5 initial rows
+            for (let i = 0; i < 5; i++) {
+                addRow();
             }
             
             updateGrandTotal();
-            saveTableData(); // Save initial data
+            saveAndSyncData();
         }
 
         function addRow(rowData = {}) {
             const tableBody = document.getElementById('tableBody');
-            const rowId = rowData.id || Date.now() + Math.random();
+            const rowId = rowData.id || 'row_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             
             const row = document.createElement('tr');
             row.id = `row-${rowId}`;
@@ -194,43 +211,42 @@
             
             tableBody.appendChild(row);
             
-            // Auto-resize textareas
+            // Initialize textarea auto-resize
             const textareas = row.querySelectorAll('textarea');
             textareas.forEach(textarea => {
                 textarea.addEventListener('input', function() {
                     autoResizeTextarea(this);
+                    saveAndSyncData();
                 });
-                // Set initial height
                 setTimeout(() => autoResizeTextarea(textarea), 10);
+            });
+            
+            // Add event listeners for data changes
+            const inputs = row.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.type !== 'checkbox') {
+                    input.addEventListener('input', saveAndSyncData);
+                    input.addEventListener('change', saveAndSyncData);
+                }
             });
             
             // Add calculation listeners
             const quantityInput = row.querySelector('.quantity-input');
             const costInput = row.querySelector('.cost-input');
-            const descriptionInput = row.querySelector('.description-input');
-            const reasonInput = row.querySelector('.reason-input');
-            const linkInput = row.querySelector('.link-input');
-            const orgSelect = row.querySelector('.organization-select');
             
             const updateHandler = () => {
                 updateRowTotal(rowId);
                 updateGrandTotal();
-                saveTableData();
+                saveAndSyncData();
             };
             
-            quantityInput.addEventListener('input', updateHandler);
-            quantityInput.addEventListener('change', updateHandler);
-            costInput.addEventListener('input', updateHandler);
-            costInput.addEventListener('change', updateHandler);
-            descriptionInput.addEventListener('input', saveTableData);
-            reasonInput.addEventListener('input', saveTableData);
-            linkInput.addEventListener('input', saveTableData);
-            orgSelect.addEventListener('change', saveTableData);
+            if (quantityInput) quantityInput.addEventListener('input', updateHandler);
+            if (costInput) costInput.addEventListener('input', updateHandler);
             
-            // Initial calculation
+            // Initial calculations
             updateRowTotal(rowId);
             updateGrandTotal();
-            saveTableData();
+            saveAndSyncData();
         }
 
         function updateRowTotal(rowId) {
@@ -271,10 +287,14 @@
             }).format(amount);
         }
 
-        // CRITICAL FUNCTION: Save table data for PDF generation
-        function saveTableData() {
+        // ============================================
+        // DATA PERSISTENCE FOR PDF GENERATION
+        // ============================================
+
+        function saveAndSyncData() {
+            // Collect all row data
             const rows = document.querySelectorAll('#tableBody tr');
-            const tableData = [];
+            tableData = [];
             
             rows.forEach(row => {
                 const rowId = row.id.replace('row-', '');
@@ -302,128 +322,108 @@
                 });
             });
             
-            // Store in hidden textarea for form submission
-            const storageElement = document.getElementById('tableDataStorage');
-            if (storageElement) {
-                storageElement.value = JSON.stringify(tableData);
-            }
+            const grandTotal = document.getElementById('grandTotal')?.textContent || '$0.00';
             
-            // Also store in JotForm widget data
-            try {
-                if (typeof JFCustomWidget !== 'undefined') {
-                    JFCustomWidget.sendData({
-                        tableData: JSON.stringify(tableData),
-                        grandTotal: document.getElementById('grandTotal')?.textContent || '$0.00'
-                    });
-                }
-            } catch (e) {
-                console.log('JotForm widget API not available');
-            }
+            // Prepare data for JotForm
+            const formData = {
+                tableData: tableData,
+                grandTotal: grandTotal,
+                // Create a text summary for PDF display
+                summaryText: generateSummaryText(tableData, grandTotal),
+                // Create HTML for PDF
+                pdfHTML: generatePDFHTML(tableData, grandTotal)
+            };
             
-            // Create HTML representation for PDF
-            createPDFHTML(tableData);
-        }
-
-        // Create static HTML representation for PDF
-        function createPDFHTML(tableData) {
-            const pdfContainer = document.getElementById('pdfContainer');
-            if (!pdfContainer) {
-                const container = document.createElement('div');
-                container.id = 'pdfContainer';
-                container.style.display = 'none';
-                container.innerHTML = generatePDFHTML(tableData);
-                document.body.appendChild(container);
-            } else {
-                pdfContainer.innerHTML = generatePDFHTML(tableData);
-            }
+            // Send to JotForm
+            sendToJotForm(formData);
             
-            // Also store in another hidden field for PDF
-            const pdfDataElement = document.getElementById('pdfData');
-            if (!pdfDataElement) {
-                const pdfData = document.createElement('textarea');
-                pdfData.id = 'pdfData';
-                pdfData.name = 'pdfData';
-                pdfData.style.display = 'none';
-                pdfData.value = generatePDFHTML(tableData);
-                document.body.appendChild(pdfData);
-            } else {
-                pdfDataElement.value = generatePDFHTML(tableData);
+            // Also store in hidden field
+            const hiddenField = document.getElementById('orderFormData');
+            if (hiddenField) {
+                hiddenField.value = JSON.stringify(formData);
             }
         }
 
-        function generatePDFHTML(tableData) {
+        function generateSummaryText(data, grandTotal) {
+            let summary = `Order Form Summary (${data.length} items):\n`;
+            data.forEach((item, index) => {
+                summary += `${index + 1}. Qty: ${item.quantity}, Desc: ${item.description.substring(0, 30)}..., Cost: $${parseFloat(item.cost).toFixed(2)}, Total: ${item.rowTotal}\n`;
+            });
+            summary += `Grand Total: ${grandTotal}`;
+            return summary;
+        }
+
+        function generatePDFHTML(data, grandTotal) {
+            // Simple HTML that will render in PDF
             let html = `
-                <div class="pdf-order-table" style="font-family: Arial, sans-serif; width: 100%;">
-                    <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
-                        <thead>
-                            <tr style="background-color: #601a9b; color: white;">
-                                <th style="padding: 6px; text-align: left; width: 45px;">QTY</th>
-                                <th style="padding: 6px; text-align: left; width: 110px;">DESCRIPTION</th>
-                                <th style="padding: 6px; text-align: left; width: 95px;">REASON</th>
-                                <th style="padding: 6px; text-align: left; width: 125px;">PRODUCT LINK</th>
-                                <th style="padding: 6px; text-align: left; width: 100px;">ORG</th>
-                                <th style="padding: 6px; text-align: center; width: 75px;">COST/ITEM</th>
-                                <th style="padding: 6px; text-align: left; width: 135px;">TOTAL</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
+            <div style="font-family: Arial, sans-serif; border: 1px solid #601a9b; border-radius: 5px; margin: 10px 0;">
+                <div style="background: #601a9b; color: white; padding: 10px; font-weight: bold;">
+                    Order Form Summary
+                </div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+                    <thead>
+                        <tr style="background: #f0e6f6;">
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Qty</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Description</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Reason</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Organization</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: right;">Cost</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: right;">Total</th>
+                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
             
-            let grandTotal = 0;
-            
-            tableData.forEach(row => {
-                const quantity = parseFloat(row.quantity) || 0;
-                const cost = parseFloat(row.cost) || 0;
-                const rowTotal = quantity * cost;
-                grandTotal += rowTotal;
-                
-                const orgDisplay = row.organization === 'spark_home_health' ? 'Spark HH' : 
-                                  row.organization === 'spark_therapy' ? 'Spark Therapy' : 'Both';
+            data.forEach(item => {
+                const orgText = item.organization === 'spark_home_health' ? 'Spark HH' : 
+                              item.organization === 'spark_therapy' ? 'Spark Therapy' : 'Both';
+                const quantity = parseFloat(item.quantity) || 0;
+                const cost = parseFloat(item.cost) || 0;
+                const total = quantity * cost;
                 
                 html += `
-                    <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 6px;">${quantity}</td>
-                        <td style="padding: 6px;">${escapeHtml(row.description)}</td>
-                        <td style="padding: 6px;">${escapeHtml(row.reason)}</td>
-                        <td style="padding: 6px; word-break: break-all;">${escapeHtml(row.link)}</td>
-                        <td style="padding: 6px;">${orgDisplay}</td>
-                        <td style="padding: 6px; text-align: center;">$${cost.toFixed(2)}</td>
-                        <td style="padding: 6px;">
-                            <div style="display: flex; align-items: center; gap: 5px;">
-                                <span>$${rowTotal.toFixed(2)}</span>
-                                ${row.status ? `<span style="font-size: 8px; color: #666;">(${row.status})</span>` : ''}
-                            </div>
-                        </td>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${quantity}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${escapeHtml(item.description || '')}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${escapeHtml(item.reason || '')}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">${orgText}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">$${cost.toFixed(2)}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: right;">$${total.toFixed(2)}</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${item.status || ''}</td>
                     </tr>`;
             });
             
             html += `
-                        </tbody>
-                        <tfoot>
-                            <tr style="background-color: #601a9b; color: white; font-weight: bold;">
-                                <td colspan="6" style="padding: 10px;">
-                                    GRAND TOTAL:
-                                </td>
-                                <td style="padding: 10px; text-align: right;">
-                                    $${grandTotal.toFixed(2)}
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>`;
+                    </tbody>
+                    <tfoot>
+                        <tr style="background: #601a9b; color: white; font-weight: bold;">
+                            <td colspan="5" style="padding: 10px; border: 1px solid #601a9b; text-align: right;">Grand Total:</td>
+                            <td colspan="2" style="padding: 10px; border: 1px solid #601a9b; text-align: right;">${grandTotal}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>`;
             
             return html;
         }
 
         function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+            if (!text) return '';
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
         }
+
+        // ============================================
+        // GLOBAL FUNCTIONS
+        // ============================================
 
         window.autoResizeTextarea = function(textarea) {
             textarea.style.height = 'auto';
             textarea.style.height = Math.min(textarea.scrollHeight, 100) + 'px';
-            saveTableData(); // Save when textarea resizes
         }
 
         window.updateStatus = function(rowId, statusType, isChecked) {
@@ -437,8 +437,22 @@
                     otherCheckbox.checked = false;
                 }
             }
-            saveTableData();
+            saveAndSyncData();
         };
+
+        // Form submission handler
+        function onFormSubmit() {
+            saveAndSyncData();
+            return true;
+        }
+
+        // Listen for form submissions
+        document.addEventListener('submit', function() {
+            saveAndSyncData();
+        });
+
+        // Auto-save periodically
+        setInterval(saveAndSyncData, 30000); // Every 30 seconds
     </script>
 </body>
 </html>
