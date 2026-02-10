@@ -45,8 +45,15 @@
         .total-icon { display: inline-block; margin-right: 5px; font-size: 13px; color: white; }
         @media (min-width: 700px) { .table-wrapper { overflow-x: hidden; } }
         
-        /* NEW: Simple PDF version styling */
-        .pdf-version { display: none; }
+        /* PDF version - hidden in form, visible in PDF */
+        .pdf-version { 
+            display: none;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 750px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            padding: 10px 5px;
+        }
     </style>
 </head>
 <body>
@@ -90,8 +97,45 @@
         </div>
     </div>
 
-    <!-- SIMPLE FIX: This hidden div will show in PDF -->
-    <div id="pdfVersion" class="pdf-version"></div>
+    <!-- PDF VERSION - Matches your design exactly -->
+    <div id="pdfVersion" class="pdf-version">
+        <div class="order-table-container">
+            <div class="table-header">
+                <h3>📋 Order Form</h3>
+            </div>
+            
+            <div class="table-wrapper">
+                <table class="order-table">
+                    <thead>
+                        <tr>
+                            <th>QTY</th>
+                            <th>DESCRIPTION</th>
+                            <th>REASON</th>
+                            <th>PRODUCT LINK</th>
+                            <th>ORG</th>
+                            <th>COST/ITEM</th>
+                            <th>TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pdfTableBody">
+                        <!-- PDF rows will be generated here -->
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="6">
+                                <div class="footer-content">
+                                    <div class="total-label">
+                                        <span class="total-icon">🎯</span> GRAND TOTAL:
+                                    </div>
+                                </div>
+                            </td>
+                            <td id="pdfGrandTotal" class="grand-total">$0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Simple initialization
@@ -252,29 +296,17 @@
             updatePDFVersion();
         };
 
-        // THIS IS THE MAGIC FUNCTION FOR PDF
+        // PDF VERSION - MATCHES EXACT DESIGN
         function updatePDFVersion() {
             const rows = document.querySelectorAll('#tableBody tr');
-            const pdfDiv = document.getElementById('pdfVersion');
+            const pdfBody = document.getElementById('pdfTableBody');
+            const pdfGrandTotal = document.getElementById('pdfGrandTotal');
             
-            let html = `
-            <div style="font-family: Arial; border: 1px solid #601a9b; margin: 10px 0; border-radius: 5px;">
-                <div style="background: #601a9b; color: white; padding: 10px; font-weight: bold; text-align: center;">
-                    Order Form
-                </div>
-                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
-                    <thead>
-                        <tr style="background: #f0e6f6;">
-                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center; width: 45px;">QTY</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left; width: 110px;">DESCRIPTION</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left; width: 95px;">REASON</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left; width: 125px;">LINK</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; text-align: left; width: 100px;">ORG</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center; width: 75px;">COST</th>
-                            <th style="padding: 8px; border: 1px solid #ddd; text-align: center; width: 135px;">TOTAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>`;
+            if (!pdfBody) return;
+            
+            pdfBody.innerHTML = '';
+            
+            let totalGrandTotal = 0;
             
             rows.forEach(row => {
                 const rowId = row.id.replace('row-', '');
@@ -284,46 +316,80 @@
                 const link = row.querySelector('.link-input')?.value || '';
                 const orgSelect = row.querySelector('.organization-select');
                 const org = orgSelect ? orgSelect.options[orgSelect.selectedIndex].text : 'Spark HH';
-                const cost = row.querySelector('.cost-input')?.value || '0.00';
-                const rowTotal = document.getElementById(`row-total-${rowId}`)?.textContent || '$0.00';
+                const cost = parseFloat(row.querySelector('.cost-input')?.value) || 0;
+                const rowTotalElement = document.getElementById(`row-total-${rowId}`);
+                const rowTotal = rowTotalElement ? parseFloat(rowTotalElement.textContent.replace(/[^0-9.-]+/g, "")) || 0 : 0;
+                
                 const approveChecked = row.querySelector('.status-approve')?.checked || false;
                 const pendChecked = row.querySelector('.status-pend')?.checked || false;
-                const status = approveChecked ? '✓ Approve' : (pendChecked ? '⚠ Pend' : '');
+                const status = approveChecked ? 'Approve' : (pendChecked ? 'Pend' : '');
                 
-                html += `
-                    <tr>
-                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">${quantity}</td>
-                        <td style="padding: 8px; border: 1px solid #ddd;">${description}</td>
-                        <td style="padding: 8px; border: 1px solid #ddd;">${reason}</td>
-                        <td style="padding: 8px; border: 1px solid #ddd; word-break: break-all;">${link}</td>
-                        <td style="padding: 8px; border: 1px solid #ddd;">${org}</td>
-                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">$${parseFloat(cost).toFixed(2)}</td>
-                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center;">
-                            ${rowTotal}<br>
-                            <small style="color: #666; font-size: 9px;">${status}</small>
-                        </td>
-                    </tr>`;
+                totalGrandTotal += rowTotal;
+                
+                const pdfRow = document.createElement('tr');
+                pdfRow.innerHTML = `
+                    <td style="text-align: center;">
+                        <div style="padding: 6px 3px; text-align: center; font-size: 12px; font-weight: 600; color: #000000;">
+                            ${quantity}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="padding: 6px 4px; font-size: 12px; color: #000000; line-height: 1.3; min-height: 45px;">
+                            ${description || ''}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="padding: 6px 4px; font-size: 12px; color: #000000; line-height: 1.3; min-height: 45px;">
+                            ${reason || ''}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="padding: 6px 4px; font-size: 12px; color: #000000; line-height: 1.3; word-break: break-all;">
+                            ${link || ''}
+                        </div>
+                    </td>
+                    <td>
+                        <div style="padding: 6px 4px; font-size: 12px; color: #000000; line-height: 1.3;">
+                            ${org}
+                        </div>
+                    </td>
+                    <td style="text-align: center;">
+                        <div style="position: relative; width: 100%;">
+                            <div style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); color: #601a9b; font-weight: 600; font-size: 11px;">$</div>
+                            <div style="padding: 6px 5px 6px 16px; text-align: right; font-size: 12px; font-weight: 600; color: #601a9b;">
+                                ${cost.toFixed(2)}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 2px; width: 100%;">
+                            <div style="font-weight: 600; color: #000000; font-size: 12px; padding: 6px 8px; background-color: #fefcff; border: 1px solid #d8c8e4; border-radius: 3px; min-height: 30px; line-height: 1.3; min-width: 65px; text-align: center;">
+                                $${rowTotal.toFixed(2)}
+                            </div>
+                            ${status ? `
+                            <div style="display: flex; flex-direction: column; gap: 1px; align-items: flex-start;">
+                                <div style="display: flex; align-items: center; gap: 2px; font-size: 9px; color: #000000;">
+                                    <div style="width: 10px; height: 10px; background-color: ${approveChecked ? '#fc731c' : '#ddd'}; border-radius: 2px;"></div>
+                                    <div>${status}</div>
+                                </div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </td>
+                `;
+                
+                pdfBody.appendChild(pdfRow);
             });
             
-            const grandTotal = document.getElementById('grandTotal')?.textContent || '$0.00';
-            
-            html += `
-                    </tbody>
-                    <tfoot>
-                        <tr style="background: #601a9b; color: white; font-weight: bold;">
-                            <td colspan="6" style="padding: 10px; border: 1px solid #601a9b; text-align: right;">GRAND TOTAL:</td>
-                            <td style="padding: 10px; border: 1px solid #601a9b; text-align: center;">${grandTotal}</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>`;
-            
-            pdfDiv.innerHTML = html;
+            if (pdfGrandTotal) {
+                pdfGrandTotal.textContent = formatCurrency(totalGrandTotal);
+            }
         }
 
-        // Update PDF version every time something changes
+        // Update PDF version on all changes
         document.addEventListener('input', updatePDFVersion);
         document.addEventListener('change', updatePDFVersion);
+        document.addEventListener('click', updatePDFVersion);
     </script>
 </body>
 </html>
