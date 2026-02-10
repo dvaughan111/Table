@@ -488,7 +488,15 @@
             `;
             
             tableBody.appendChild(row);
-            
+            <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
+
+<script type="text/javascript">
+  // When the form is submitted, this sends your table data to Jotform's database
+  JOTFORM.subscribe("submit", function() {
+      var myTableData = document.getElementById('my-table').innerHTML;
+      JOTFORM.sendData({ value: myTableData });
+  });
+</script>
             // Auto-resize textareas
             const textareas = row.querySelectorAll('textarea');
             textareas.forEach(textarea => {
