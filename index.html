@@ -2,292 +2,110 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Form Widget</title>
-    
+    <title>Jotform Order Widget</title>
     <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
-
     <style>
-        /* DESIGN STYLES */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: transparent !important;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-        
-        .widget-container {
-            padding: 10px 5px;
-            max-width: 750px;
-            margin: 0 auto;
-        }
-        
-        .order-table-container {
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 2px 10px rgba(96, 26, 155, 0.1);
-            overflow: hidden;
-            border: 1px solid #e0d4e9;
-        }
-        
-        .table-header {
-            padding: 12px 15px;
-            background: linear-gradient(135deg, #601a9b 0%, #4a148c 100%);
-            color: white;
-        }
-        
-        .table-header h3 {
-            margin: 0;
-            font-weight: 600;
-            font-size: 16px;
-            text-align: center;
-        }
-        
-        .table-wrapper { overflow-x: auto; }
-        
-        .order-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            font-size: 12px;
-        }
-        
-        .order-table th {
-            background-color: #f8f3fc;
-            padding: 8px 4px;
-            text-align: left;
-            font-weight: 600;
-            color: #601a9b;
-            border-bottom: 2px solid #e0d4e9;
-            font-size: 11px;
-            text-transform: uppercase;
-        }
-        
-        .order-table td {
-            padding: 8px 4px;
-            border-bottom: 1px solid #f0e6f6;
-            vertical-align: top;
-            color: #000000;
-        }
-        
-        /* COLUMN WIDTHS */
-        .order-table th:nth-child(1) { width: 45px; text-align: center; } 
-        .order-table th:nth-child(2) { width: 110px; } 
-        .order-table th:nth-child(3) { width: 95px; }  
-        .order-table th:nth-child(4) { width: 125px; } 
-        .order-table th:nth-child(5) { width: 100px; } 
-        .order-table th:nth-child(6) { width: 75px; text-align: center; } 
-        .order-table th:nth-child(7) { width: 135px; } 
-        
-        /* INPUTS */
-        .order-table input, .order-table textarea, .order-table select {
-            width: 100%;
-            padding: 6px 4px;
-            border: 1px solid #d8c8e4;
-            border-radius: 3px;
-            font-size: 12px;
-            background-color: #fefcff;
-            font-family: inherit;
-        }
-
-        .cost-input-wrapper { position: relative; width: 100%; }
-        .cost-input-wrapper::before {
-            content: "$";
-            position: absolute;
-            left: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #601a9b;
-            font-weight: 600;
-            font-size: 11px;
-        }
-        .cost-input { padding-left: 16px !important; text-align: right; }
-
-        /* FOOTER */
-        .total-row {
-            background: linear-gradient(to right, #601a9b, #4a148c);
-            color: white;
-            height: 60px;
-        }
-        
-        .footer-content {
-            padding-left: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        
-        .add-row-btn {
-            background-color: #fc731c;
-            color: white;
-            border: none;
-            padding: 4px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 11px;
-            width: fit-content;
-        }
-
-        .grand-total {
-            font-size: 14px;
-            font-weight: 700;
-            text-align: right;
-            padding-right: 15px;
-        }
-
-        /* PRINT OPTIMIZATION (For the PDF engine) */
-        @media print {
-            .add-row-btn { display: none !important; }
-            .order-table { border: 1px solid #ccc; }
-        }
+        /* This is only for the LIVE FORM view */
+        body { font-family: sans-serif; margin: 0; padding: 10px; background: transparent; }
+        table { width: 100%; border-collapse: collapse; background: white; font-size: 13px; }
+        th { background: #601a9b; color: white; padding: 10px; text-align: left; }
+        td { border-bottom: 1px solid #eee; padding: 8px; }
+        input, textarea, select { width: 100%; border: 1px solid #ccc; padding: 5px; border-radius: 4px; }
+        .total-row { background: #4a148c; color: white; font-weight: bold; }
+        .add-btn { background: #fc731c; color: white; border: none; padding: 8px 15px; cursor: pointer; border-radius: 4px; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="widget-container">
-        <div class="order-table-container">
-            <div class="table-header">
-                <h3>📋 Order Form</h3>
-            </div>
-            <div class="table-wrapper">
-                <table id="orderTable" class="order-table">
-                    <thead>
-                        <tr>
-                            <th>QTY</th>
-                            <th>DESCRIPTION</th>
-                            <th>REASON</th>
-                            <th>PRODUCT LINK</th>
-                            <th>ORG</th>
-                            <th>COST/ITEM</th>
-                            <th>TOTAL</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                    <tfoot>
-                        <tr class="total-row">
-                            <td colspan="6">
-                                <div class="footer-content">
-                                    <div style="font-size: 13px; font-weight: 700;">🎯 GRAND TOTAL:</div>
-                                    <button type="button" id="addRowBtn" class="add-row-btn">+ Add Row</button>
-                                </div>
-                            </td>
-                            <td id="grandTotal" class="grand-total">$0.00</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
+
+    <div id="main-content">
+        <table id="orderTable">
+            <thead>
+                <tr>
+                    <th style="width:50px">QTY</th>
+                    <th>DESCRIPTION</th>
+                    <th>ORG</th>
+                    <th style="width:80px">COST</th>
+                    <th style="width:100px">TOTAL</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                </tbody>
+            <tfoot>
+                <tr class="total-row">
+                    <td colspan="4" style="text-align:right; padding:10px;">GRAND TOTAL:</td>
+                    <td id="grandTotal" style="padding:10px;">$0.00</td>
+                </tr>
+            </tfoot>
+        </table>
+        <button type="button" class="add-btn" id="addRowBtn">+ Add Item</button>
     </div>
 
     <script>
-        // --- 1. JOTFORM DATA SYNC ---
-        function sendDataToJotform() {
-            // Clone the table for the PDF (to keep it clean)
-            const tableClone = document.getElementById('orderTable').cloneNode(true);
+        // 1. DATA TO JOTFORM (Simplified & Inlined for PDF)
+        function syncToJotform() {
+            const rows = document.querySelectorAll('#tableBody tr');
+            let total = 0;
             
-            // Remove the Add Row button from the PDF clone
-            const btn = tableClone.querySelector('#addRowBtn');
-            if(btn) btn.remove();
-
-            // Convert interactive inputs into static text for the PDF
-            tableClone.querySelectorAll('input, textarea, select').forEach(el => {
-                const val = el.value || "";
-                let displayVal = val;
-                if (el.tagName === 'SELECT') {
-                    displayVal = el.options[el.selectedIndex].text;
-                }
-                const span = document.createElement('span');
-                span.textContent = displayVal;
-                el.parentNode.replaceChild(span, el);
-            });
-
-            const finalHTML = tableClone.outerHTML;
-
-            // Send to Widget Data (for Submissions table)
-            JOTFORM.sendData({ value: finalHTML });
-
-            // Push to the hidden "tableProxy" field (for PDF Editor)
-            window.parent.postMessage({
-                action: 'setValues',
-                value: {
-                    'tableProxy': finalHTML 
-                }
-            }, '*');
-        }
-
-        // --- 2. TABLE FUNCTIONALITY ---
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeTable();
-            document.getElementById('addRowBtn').addEventListener('click', () => {
-                addRow();
-                sendDataToJotform();
+            // Build a clean HTML string for the PDF with INLINE STYLES
+            let htmlForPDF = `<table style="width:100%; border-collapse:collapse; font-family:sans-serif; border:1px solid #601a9b;">`;
+            htmlForPDF += `<tr style="background:#601a9b; color:white;"><th>QTY</th><th>DESCRIPTION</th><th>ORG</th><th>TOTAL</th></tr>`;
+            
+            rows.forEach(row => {
+                const q = row.querySelector('.qty').value || 0;
+                const d = row.querySelector('.desc').value || "";
+                const o = row.querySelector('.org').value;
+                const c = row.querySelector('.cost').value || 0;
+                const rowTotal = (q * c).toFixed(2);
+                total += parseFloat(rowTotal);
+                
+                htmlForPDF += `<tr>
+                    <td style="border:1px solid #eee; padding:8px; text-align:center;">${q}</td>
+                    <td style="border:1px solid #eee; padding:8px;">${d}</td>
+                    <td style="border:1px solid #eee; padding:8px;">${o}</td>
+                    <td style="border:1px solid #eee; padding:8px;">$${rowTotal}</td>
+                </tr>`;
             });
             
-            JOTFORM.subscribe("ready", function() {
-                sendDataToJotform(); 
-            });
-        });
+            htmlForPDF += `<tr style="background:#f3f3f3; font-weight:bold;"><td colspan="3" style="text-align:right; padding:10px;">GRAND TOTAL:</td><td style="padding:10px;">$${total.toFixed(2)}</td></tr>`;
+            htmlForPDF += `</table>`;
 
-        function initializeTable() {
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = '';
-            for (let i = 0; i < 3; i++) { addRow(); }
-            updateGrandTotal();
+            // Update visible total in widget
+            document.getElementById('grandTotal').textContent = `$${total.toFixed(2)}`;
+
+            // Send to Jotform
+            JOTFORM.sendData({ value: htmlForPDF });
         }
 
+        // 2. WIDGET LOGIC
         function addRow() {
-            const tableBody = document.getElementById('tableBody');
-            const rowId = Date.now() + Math.random();
-            const row = document.createElement('tr');
-            row.id = `row-${rowId}`;
-            row.innerHTML = `
-                <td><input type="number" min="1" value="1" class="quantity-input" data-row="${rowId}"></td>
-                <td><textarea class="description-input" placeholder="Item..." data-row="${rowId}" rows="2"></textarea></td>
-                <td><textarea class="reason-input" placeholder="Reason..." data-row="${rowId}" rows="2"></textarea></td>
-                <td><input type="url" class="link-input" placeholder="https://" data-row="${rowId}"></td>
-                <td>
-                    <select class="organization-select" data-row="${rowId}">
-                        <option value="spark_home_health">Spark HH</option>
-                        <option value="spark_therapy">Spark Therapy</option>
-                        <option value="both">Both</option>
-                    </select>
-                </td>
-                <td><div class="cost-input-wrapper"><input type="number" step="0.01" value="0.00" class="cost-input" data-row="${rowId}"></div></td>
-                <td><div class="row-total" id="row-total-${rowId}">$0.00</div></td>
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="number" class="qty" value="1"></td>
+                <td><textarea class="desc" rows="1"></textarea></td>
+                <td><select class="org"><option>Spark HH</option><option>Spark Therapy</option></select></td>
+                <td><input type="number" class="cost" value="0.00" step="0.01"></td>
+                <td class="row-total">$0.00</td>
             `;
-            tableBody.appendChild(row);
-
-            row.querySelectorAll('input, textarea, select').forEach(input => {
-                input.addEventListener('input', () => {
-                    updateRowTotal(rowId);
-                    updateGrandTotal();
-                    sendDataToJotform(); 
+            document.getElementById('tableBody').appendChild(tr);
+            
+            // Add listeners to every new input
+            tr.querySelectorAll('input, textarea, select').forEach(el => {
+                el.addEventListener('input', () => {
+                    const q = tr.querySelector('.qty').value;
+                    const c = tr.querySelector('.cost').value;
+                    tr.querySelector('.row-total').textContent = '$' + (q * c).toFixed(2);
+                    syncToJotform();
                 });
             });
         }
 
-        function updateRowTotal(rowId) {
-            const q = document.querySelector(`.quantity-input[data-row="${rowId}"]`);
-            const c = document.querySelector(`.cost-input[data-row="${rowId}"]`);
-            if(q && c) {
-                const total = (parseFloat(q.value) || 0) * (parseFloat(c.value) || 0);
-                document.getElementById(`row-total-${rowId}`).textContent = formatCurrency(total);
-            }
-        }
-
-        function updateGrandTotal() {
-            let total = 0;
-            document.querySelectorAll('.row-total').forEach(el => {
-                total += parseFloat(el.textContent.replace(/[^0-9.-]+/g, "")) || 0;
-            });
-            document.getElementById('grandTotal').textContent = formatCurrency(total);
-        }
-
-        function formatCurrency(num) {
-            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
-        }
+        // Initialize
+        document.getElementById('addRowBtn').addEventListener('click', addRow);
+        addRow(); // Start with one row
+        
+        JOTFORM.subscribe("ready", function() {
+            syncToJotform();
+        });
     </script>
 </body>
 </html>
