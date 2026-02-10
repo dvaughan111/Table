@@ -189,18 +189,35 @@
     </div>
 
     <script>
-        // --- DATA SYNC TO JOTFORM ---
         function sendDataToJotform() {
-            // We clone the table to strip out UI elements for the PDF
-            const tableClone = document.getElementById('orderTable').cloneNode(true);
-            
-            // Convert inputs to plain text so they render nicely in the PDF
-            tableClone.querySelectorAll('input, textarea, select').forEach(el => {
-                const val = el.value;
-                const span = document.createElement('span');
-                span.textContent = (el.tagName === 'SELECT') ? el.options[el.selectedIndex].text : val;
-                el.parentNode.replaceChild(span, el);
-            });
+    const tableElement = document.getElementById('orderTable');
+    // We use a clone to ensure we aren't sending "live" UI buttons to the PDF
+    const tableClone = tableElement.cloneNode(true);
+    const btn = tableClone.querySelector('#addRowBtn');
+    if(btn) btn.remove();
+
+    // 1. Convert inputs to static text for the PDF
+    tableClone.querySelectorAll('input, textarea, select').forEach(el => {
+        const val = el.value || "";
+        const span = document.createElement('span');
+        span.textContent = (el.tagName === 'SELECT') ? el.options[el.selectedIndex].text : val;
+        el.parentNode.replaceChild(span, el);
+    });
+
+    const finalHTML = tableClone.outerHTML;
+
+    // 2. Send data to the widget itself
+    JOTFORM.sendData({ value: finalHTML });
+
+    // 3. THE MAGIC: Push to the hidden Jotform field (the "Proxy")
+    // This allows the PDF Editor to see a "Standard Field" instead of a widget
+    window.parent.postMessage({
+        type: 'setValues',
+        value: {
+            'tableProxy': finalHTML // Replace 'tableProxy' with your field's Unique Name
+        }
+    }, '*');
+}
 
             // Hide the "Add Row" button in the PDF data
             const btn = tableClone.querySelector('#addRowBtn');
