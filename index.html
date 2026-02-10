@@ -3,27 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Form</title>
+    <title>Order Form Widget</title>
+    
+    <script src="//js.jotform.com/JotFormCustomWidget.min.js"></script>
+
     <style>
         /* CLEAN, COMPACT DESIGN */
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         
         body {
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: transparent !important; /* Required for Jotform */
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
         .widget-container {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             padding: 10px 5px;
             max-width: 750px;
             margin: 0 auto;
-            background-color: #f9f9f9;
         }
         
         .order-table-container {
@@ -49,9 +47,7 @@
         }
         
         /* TABLE */
-        .table-wrapper {
-            overflow-x: auto;
-        }
+        .table-wrapper { overflow-x: auto; }
         
         .order-table {
             width: 100%;
@@ -60,7 +56,6 @@
             font-size: 12px;
         }
         
-        /* TABLE HEADERS */
         .order-table th {
             background-color: #f8f3fc;
             padding: 8px 4px;
@@ -70,10 +65,8 @@
             border-bottom: 2px solid #e0d4e9;
             font-size: 11px;
             text-transform: uppercase;
-            white-space: nowrap;
         }
         
-        /* TABLE CELLS */
         .order-table td {
             padding: 8px 4px;
             border-bottom: 1px solid #f0e6f6;
@@ -81,101 +74,27 @@
             color: #000000;
         }
         
-        /* COLUMN WIDTHS FOR 750px */
-        .order-table th:nth-child(1), /* Qty */
-        .order-table td:nth-child(1) {
-            width: 45px;
-            min-width: 45px;
-            max-width: 45px;
-            text-align: center;
-        }
-        
-        .order-table th:nth-child(2), /* Description */
-        .order-table td:nth-child(2) {
-            width: 110px;
-            min-width: 110px;
-            max-width: 110px;
-        }
-        
-        .order-table th:nth-child(3), /* Reason */
-        .order-table td:nth-child(3) {
-            width: 95px;
-            min-width: 95px;
-            max-width: 95px;
-        }
-        
-        .order-table th:nth-child(4), /* Link */
-        .order-table td:nth-child(4) {
-            width: 125px;
-            min-width: 125px;
-            max-width: 125px;
-        }
-        
-        .order-table th:nth-child(5), /* Organization */
-        .order-table td:nth-child(5) {
-            width: 100px;
-            min-width: 100px;
-            max-width: 100px;
-        }
-        
-        .order-table th:nth-child(6), /* Cost */
-        .order-table td:nth-child(6) {
-            width: 75px;
-            min-width: 75px;
-            max-width: 75px;
-            text-align: center;
-        }
-        
-        .order-table th:nth-child(7), /* Total with checkboxes */
-        .order-table td:nth-child(7) {
-            width: 135px;
-            min-width: 135px;
-            max-width: 135px;
-        }
-        
-        /* TOTAL WIDTH: 45+110+95+125+100+75+135 = 685px (fits in 750px) */
+        /* COLUMN WIDTHS */
+        .order-table th:nth-child(1) { width: 45px; text-align: center; } /* Qty */
+        .order-table th:nth-child(2) { width: 110px; } /* Desc */
+        .order-table th:nth-child(3) { width: 95px; }  /* Reason */
+        .order-table th:nth-child(4) { width: 125px; } /* Link */
+        .order-table th:nth-child(5) { width: 100px; } /* Org */
+        .order-table th:nth-child(6) { width: 75px; text-align: center; } /* Cost */
+        .order-table th:nth-child(7) { width: 135px; } /* Total */
         
         /* INPUTS */
-        .order-table input,
-        .order-table textarea,
-        .order-table select {
+        .order-table input, .order-table textarea, .order-table select {
             width: 100%;
             padding: 6px 4px;
             border: 1px solid #d8c8e4;
             border-radius: 3px;
             font-size: 12px;
-            color: #000000;
             background-color: #fefcff;
-            font-family: inherit;
-            line-height: 1.3;
         }
-        
-        .order-table input:focus,
-        .order-table textarea:focus,
-        .order-table select:focus {
-            outline: none;
-            border-color: #fc731c;
-            box-shadow: 0 0 0 2px rgba(252, 115, 28, 0.1);
-            background-color: white;
-        }
-        
-        /* QUANTITY INPUT */
-        .order-table td:nth-child(1) input {
-            padding: 6px 3px;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 600;
-            max-width: 35px;
-            margin: 0 auto;
-            display: block;
-        }
-        
-        /* COST INPUT - WITH DOLLAR SIGN */
-        .cost-input-wrapper {
-            position: relative;
-            width: 100%;
-        }
-        
+
+        /* COST INPUT */
+        .cost-input-wrapper { position: relative; width: 100%; }
         .cost-input-wrapper::before {
             content: "$";
             position: absolute;
@@ -184,123 +103,24 @@
             transform: translateY(-50%);
             color: #601a9b;
             font-weight: 600;
-            z-index: 1;
-            pointer-events: none;
             font-size: 11px;
         }
-        
-        .order-table td:nth-child(6) input {
-            padding: 6px 5px 6px 16px;
-            text-align: right;
-            font-size: 12px;
-            font-weight: 600;
-            width: 100%;
-            color: #601a9b;
-        }
-        
-        /* TEXTAREAS */
-        .order-table textarea {
-            resize: vertical;
-            min-height: 45px;
-            line-height: 1.3;
-            font-size: 12px;
-            color: #000000;
-        }
-        
-        /* TOTAL CELL CONTAINER - MINIMAL SPACE */
-        .total-cell-container {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            width: 100%;
-        }
-        
-        /* ROW TOTAL */
-        .row-total {
-            font-weight: 600;
-            color: #000000;
-            font-size: 12px;
-            padding: 6px 8px;
-            background-color: #fefcff;
-            border: 1px solid #d8c8e4;
-            border-radius: 3px;
-            min-height: 30px;
-            line-height: 1.3;
-            min-width: 65px;
-            text-align: center;
-            flex-shrink: 0;
-            margin: 0;
-        }
-        
-        /* STATUS CHECKBOXES - TIGHT TO TOTAL */
-        .status-checkboxes {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-            align-items: flex-start;
-            padding: 0;
-            margin: 0;
-            background: none;
-            border: none;
-            min-height: auto;
-        }
-        
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            font-size: 9px;
-            color: #000000;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .checkbox-group input[type="checkbox"] {
-            width: 10px;
-            height: 10px;
-            margin: 0;
-            accent-color: #fc731c;
-            cursor: pointer;
-        }
-        
-        .checkbox-group label {
-            cursor: pointer;
-            font-weight: 500;
-            color: #000000;
-            white-space: nowrap;
-            margin: 0;
-            padding: 0;
-        }
-        
-        /* GRAND TOTAL ROW - PURPLE FOOTER WITH ADD BUTTON */
+        .cost-input { padding-left: 16px !important; text-align: right; }
+
+        /* FOOTER / TOTALS */
         .total-row {
             background: linear-gradient(to right, #601a9b, #4a148c);
             color: white;
-            font-weight: 700;
-            position: relative;
-            height: 60px; /* Taller to accommodate both text and button */
+            height: 60px;
         }
         
-        /* FOOTER CONTENT CONTAINER */
         .footer-content {
-            position: absolute;
-            left: 15px;
-            top: 10px;
+            padding-left: 15px;
             display: flex;
             flex-direction: column;
             gap: 5px;
         }
         
-        /* GRAND TOTAL LABEL - WHITE AND BOLD */
-        .total-label {
-            font-size: 13px;
-            color: white !important; /* WHITE TEXT */
-            font-weight: 700 !important; /* BOLD */
-            text-align: left;
-            white-space: nowrap;
-        }
-        
-        /* ADD BUTTON IN BOTTOM LEFT OF PURPLE FOOTER */
         .add-row-btn {
             background-color: #fc731c;
             color: white;
@@ -310,38 +130,24 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 11px;
-            transition: all 0.2s ease;
             width: fit-content;
         }
-        
-        .add-row-btn:hover {
-            background-color: #e56418;
-        }
-        
-        /* GRAND TOTAL AMOUNT - WHITE AND BOLD */
+
         .grand-total {
             font-size: 14px;
-            color: white !important; /* WHITE TEXT */
-            font-weight: 700 !important; /* BOLD */
+            font-weight: 700;
             text-align: right;
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+            padding-right: 15px;
         }
-        
-        /* ICON IN GRAND TOTAL - WHITE */
-        .total-icon {
-            display: inline-block;
-            margin-right: 5px;
-            font-size: 13px;
-            color: white;
-        }
-        
-        /* REMOVE HORIZONTAL SCROLL ON DESKTOP */
-        @media (min-width: 700px) {
-            .table-wrapper {
-                overflow-x: hidden;
+
+        /* PDF / PRINT OPTIMIZATION */
+        @media print {
+            .add-row-btn { display: none !important; }
+            input, textarea, select {
+                border: none !important;
+                background: transparent !important;
+                appearance: none;
+                -webkit-appearance: none;
             }
         }
     </style>
@@ -352,7 +158,6 @@
             <div class="table-header">
                 <h3>📋 Order Form</h3>
             </div>
-            
             <div class="table-wrapper">
                 <table id="orderTable" class="order-table">
                     <thead>
@@ -366,17 +171,12 @@
                             <th>TOTAL</th>
                         </tr>
                     </thead>
-                    <tbody id="tableBody">
-                        <!-- Rows will be generated here -->
-                    </tbody>
+                    <tbody id="tableBody"></tbody>
                     <tfoot>
                         <tr class="total-row">
                             <td colspan="6">
                                 <div class="footer-content">
-                                    <div class="total-label">
-                                        <span class="total-icon">🎯</span> GRAND TOTAL:
-                                    </div>
-                                    <!-- ADD ROW BUTTON IN BOTTOM LEFT OF PURPLE FOOTER -->
+                                    <div style="font-size: 13px; font-weight: 700;">🎯 GRAND TOTAL:</div>
                                     <button type="button" id="addRowBtn" class="add-row-btn">+ Add Row</button>
                                 </div>
                             </td>
@@ -389,62 +189,57 @@
     </div>
 
     <script>
+        // --- DATA SYNC TO JOTFORM ---
+        function sendDataToJotform() {
+            // We clone the table to strip out UI elements for the PDF
+            const tableClone = document.getElementById('orderTable').cloneNode(true);
+            
+            // Convert inputs to plain text so they render nicely in the PDF
+            tableClone.querySelectorAll('input, textarea, select').forEach(el => {
+                const val = el.value;
+                const span = document.createElement('span');
+                span.textContent = (el.tagName === 'SELECT') ? el.options[el.selectedIndex].text : val;
+                el.parentNode.replaceChild(span, el);
+            });
+
+            // Hide the "Add Row" button in the PDF data
+            const btn = tableClone.querySelector('#addRowBtn');
+            if(btn) btn.style.display = 'none';
+
+            // Send the cleaned HTML string to Jotform
+            JOTFORM.sendData({
+                value: tableClone.outerHTML
+            });
+        }
+
+        // --- TABLE LOGIC ---
         document.addEventListener('DOMContentLoaded', function() {
             initializeTable();
             document.getElementById('addRowBtn').addEventListener('click', addRow);
             
-            // Initialize auto-resize for textareas
-            setTimeout(() => {
-                document.querySelectorAll('textarea').forEach(textarea => {
-                    autoResizeTextarea(textarea);
-                });
-            }, 100);
+            // Start the Jotform Widget Subscription
+            JOTFORM.subscribe("ready", function() {
+                sendDataToJotform(); // Initial sync
+            });
         });
 
         function initializeTable() {
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = '';
-            
-            // Create 5 initial rows
-            for (let i = 0; i < 5; i++) {
-                addRow();
-            }
-            
+            for (let i = 0; i < 3; i++) { addRow(); }
             updateGrandTotal();
         }
 
         function addRow() {
             const tableBody = document.getElementById('tableBody');
             const rowId = Date.now() + Math.random();
-            
             const row = document.createElement('tr');
             row.id = `row-${rowId}`;
             row.innerHTML = `
-                <td>
-                    <input type="number" 
-                           min="1" 
-                           value="1" 
-                           class="quantity-input"
-                           data-row="${rowId}">
-                </td>
-                <td>
-                    <textarea class="description-input" 
-                              placeholder="Item description" 
-                              data-row="${rowId}"
-                              rows="2"></textarea>
-                </td>
-                <td>
-                    <textarea class="reason-input" 
-                              placeholder="Reason for request" 
-                              data-row="${rowId}"
-                              rows="2"></textarea>
-                </td>
-                <td>
-                    <input type="url" 
-                           class="link-input" 
-                           placeholder="https://example.com"
-                           data-row="${rowId}">
-                </td>
+                <td><input type="number" min="1" value="1" class="quantity-input" data-row="${rowId}"></td>
+                <td><textarea class="description-input" placeholder="Item description" data-row="${rowId}" rows="2"></textarea></td>
+                <td><textarea class="reason-input" placeholder="Reason" data-row="${rowId}" rows="2"></textarea></td>
+                <td><input type="url" class="link-input" placeholder="https://" data-row="${rowId}"></td>
                 <td>
                     <select class="organization-select" data-row="${rowId}">
                         <option value="spark_home_health">Spark HH</option>
@@ -452,124 +247,38 @@
                         <option value="both">Both</option>
                     </select>
                 </td>
-                <td>
-                    <div class="cost-input-wrapper">
-                        <input type="number" 
-                               step="0.01" 
-                               min="0" 
-                               value="0.00" 
-                               class="cost-input"
-                               data-row="${rowId}">
-                    </div>
-                </td>
-                <td>
-                    <div class="total-cell-container">
-                        <div class="row-total" id="row-total-${rowId}">$0.00</div>
-                        <div class="status-checkboxes">
-                            <div class="checkbox-group">
-                                <input type="checkbox" 
-                                       id="approve-${rowId}" 
-                                       class="status-approve"
-                                       data-row="${rowId}"
-                                       onchange="updateStatus('${rowId}', 'approve', this.checked)">
-                                <label for="approve-${rowId}">Approve</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" 
-                                       id="pend-${rowId}" 
-                                       class="status-pend"
-                                       data-row="${rowId}"
-                                       onchange="updateStatus('${rowId}', 'pend', this.checked)">
-                                <label for="pend-${rowId}">Pend</label>
-                            </div>
-                        </div>
-                    </div>
-                </td>
+                <td><div class="cost-input-wrapper"><input type="number" step="0.01" value="0.00" class="cost-input" data-row="${rowId}"></div></td>
+                <td><div class="row-total" id="row-total-${rowId}">$0.00</div></td>
             `;
-            
             tableBody.appendChild(row);
-            
-            // Auto-resize textareas
-            const textareas = row.querySelectorAll('textarea');
-            textareas.forEach(textarea => {
-                textarea.addEventListener('input', function() {
-                    autoResizeTextarea(this);
+
+            // Add change listeners to trigger sync
+            row.querySelectorAll('input, textarea, select').forEach(input => {
+                input.addEventListener('input', () => {
+                    updateRowTotal(rowId);
+                    updateGrandTotal();
+                    sendDataToJotform(); // Push to Jotform on every keystroke
                 });
-                // Set initial height
-                setTimeout(() => autoResizeTextarea(textarea), 10);
             });
-            
-            // Add calculation listeners
-            const quantityInput = row.querySelector('.quantity-input');
-            const costInput = row.querySelector('.cost-input');
-            
-            const updateHandler = () => {
-                updateRowTotal(rowId);
-                updateGrandTotal();
-            };
-            
-            quantityInput.addEventListener('input', updateHandler);
-            quantityInput.addEventListener('change', updateHandler);
-            costInput.addEventListener('input', updateHandler);
-            costInput.addEventListener('change', updateHandler);
-            
-            // Initial calculation
-            updateRowTotal(rowId);
-            updateGrandTotal();
         }
 
         function updateRowTotal(rowId) {
-            const quantityInput = document.querySelector(`.quantity-input[data-row="${rowId}"]`);
-            const costInput = document.querySelector(`.cost-input[data-row="${rowId}"]`);
-            const rowTotalElement = document.getElementById(`row-total-${rowId}`);
-            
-            if (!quantityInput || !costInput || !rowTotalElement) return;
-            
-            const quantity = parseFloat(quantityInput.value) || 0;
-            const costPerItem = parseFloat(costInput.value) || 0;
-            const rowTotal = quantity * costPerItem;
-            
-            rowTotalElement.textContent = formatCurrency(rowTotal);
+            const qty = parseFloat(document.querySelector(`.quantity-input[data-row="${rowId}"]`).value) || 0;
+            const cost = parseFloat(document.querySelector(`.cost-input[data-row="${rowId}"]`).value) || 0;
+            document.getElementById(`row-total-${rowId}`).textContent = formatCurrency(qty * cost);
         }
 
         function updateGrandTotal() {
-            const rowTotalElements = document.querySelectorAll('.row-total');
-            let grandTotal = 0;
-            
-            rowTotalElements.forEach(element => {
-                const text = element.textContent.replace(/[^0-9.-]+/g, "");
-                const value = parseFloat(text) || 0;
-                grandTotal += value;
+            let total = 0;
+            document.querySelectorAll('.row-total').forEach(el => {
+                total += parseFloat(el.textContent.replace(/[^0-9.-]+/g, "")) || 0;
             });
-            
-            document.getElementById('grandTotal').textContent = formatCurrency(grandTotal);
+            document.getElementById('grandTotal').textContent = formatCurrency(total);
         }
 
-        function formatCurrency(amount) {
-            return new Intl.NumberFormat('en-US', {
-                style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2
-            }).format(amount);
+        function formatCurrency(num) {
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
         }
-
-        window.autoResizeTextarea = function(textarea) {
-            textarea.style.height = 'auto';
-            textarea.style.height = Math.min(textarea.scrollHeight, 100) + 'px';
-        }
-
-        window.updateStatus = function(rowId, statusType, isChecked) {
-            if (isChecked) {
-                const otherCheckbox = document.querySelector(
-                    statusType === 'approve' 
-                    ? `.status-pend[data-row="${rowId}"]` 
-                    : `.status-approve[data-row="${rowId}"]`
-                );
-                if (otherCheckbox) {
-                    otherCheckbox.checked = false;
-                }
-            }
-        };
     </script>
 </body>
 </html>
